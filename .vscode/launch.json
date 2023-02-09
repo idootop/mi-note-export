@@ -7,13 +7,16 @@
       "request": "launch",
       "args": ["${workspaceFolder}/${relativeFile}"],
       "runtimeArgs": [
+        "--loader",
+        "ts-node/esm",
         "-r",
         "ts-node/register",
         "-r",
-        "tsconfig-paths/register"
+        "tsconfig-paths/register",
+        "-r",
+        "./src/disable-experimental-warning.cjs"
       ],
       "cwd": "${workspaceRoot}",
-      "protocol": "inspector",
       "internalConsoleOptions": "openOnSessionStart",
       "env": {
         "NODE_ENV": "development"
@@ -25,13 +28,16 @@
       "request": "launch",
       "args": ["${workspaceFolder}/src/index.ts"],
       "runtimeArgs": [
+        "--loader",
+        "ts-node/esm",
         "-r",
         "ts-node/register",
         "-r",
-        "tsconfig-paths/register"
+        "tsconfig-paths/register",
+        "-r",
+        "./src/disable-experimental-warning.cjs"
       ],
       "cwd": "${workspaceRoot}",
-      "protocol": "inspector",
       "internalConsoleOptions": "openOnSessionStart",
       "env": {
         "NODE_ENV": "development"

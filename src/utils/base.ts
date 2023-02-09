@@ -43,7 +43,8 @@ export function jsonEncode(obj: any, prettier = false) {
   }
 }
 
-export function jsonDecode(json: string) {
+export function jsonDecode(json?: string) {
+  if (!json) return undefined;
   try {
     return JSON.parse(json);
   } catch (error) {

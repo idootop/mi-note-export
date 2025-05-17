@@ -12,6 +12,7 @@ interface Note {
     id: string;
     path: string;
   }[];
+  title: string;
 }
 
 const limit = 200;
@@ -59,8 +60,19 @@ const getNotesFromLocal = async (): Promise<Note[]> => {
   let datas = jsonDecode(str);
   datas = datas.map((e) => {
     const files = e.setting?.data ?? [];
-    let content = e.snippet;
+    // process folderId
     const folderId = String(e.folderId);
+    //process title
+    const title = (() => {
+      if (!e.extraInfo) return '';
+      try {
+        return JSON.parse(e.extraInfo).title || '';
+      } catch (error) {
+        console.error('Failed to parse extraInfo:', error);
+        return '';
+      }
+    })();
+    let content = e.snippet;
     content = content.replaceAll('<input type="checkbox" />', '- [ ] ');
     content = content.replaceAll(
       '<input type="checkbox" checked="true" />',
@@ -96,6 +108,7 @@ const getNotesFromLocal = async (): Promise<Note[]> => {
       content: content,
       files: finalFiles,
       folderId: folderId,
+      title: title,
     };
   });
   [].sort();
@@ -107,6 +120,7 @@ const getNotesFromLocal = async (): Promise<Note[]> => {
         id: e.id,
         content: e.content,
         folderId: e.folderId,
+        title: e.title,
         ...(e.files.length > 0 ? { files: e.files } : {}),
       };
     });

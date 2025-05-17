@@ -60,6 +60,7 @@ const getNotesFromLocal = async (): Promise<Note[]> => {
   datas = datas.map((e) => {
     const files = e.setting?.data ?? [];
     let content = e.snippet;
+    const folderId = String(e.folderId);
     content = content.replaceAll('<input type="checkbox" />', '- [ ] ');
     content = content.replaceAll(
       '<input type="checkbox" checked="true" />',
@@ -94,6 +95,7 @@ const getNotesFromLocal = async (): Promise<Note[]> => {
       createDate: e.createDate,
       content: content,
       files: finalFiles,
+      folderId: folderId,
     };
   });
   [].sort();
@@ -104,6 +106,7 @@ const getNotesFromLocal = async (): Promise<Note[]> => {
         date: getNoteDate(e.createDate),
         id: e.id,
         content: e.content,
+        folderId: e.folderId,
         ...(e.files.length > 0 ? { files: e.files } : {}),
       };
     });

@@ -1,21 +1,5 @@
 {
-  "compilerOptions": {
-    "target": "es6",
-    "lib": ["esnext"],
-    "module": "ESNext",
-    "moduleResolution": "node16",
-    "esModuleInterop": true,
-    "resolveJsonModule": true,
-    "strict": true,
-    "outDir": "build",
-    "declaration": true,
-    "sourceMap": true,
-    // "baseUrl": "./src",
-    "noImplicitAny": false
-    // "paths": {
-    //   "@/*": ["./*"]
-    // }
-  },
-  "include": ["./src"],
+  "extends": "@del-wang/config/typescript-bundler",
+  "include": ["**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]
 }

@@ -1,8 +1,6 @@
-import { kCookie } from './services/env/index.js';
-import { http } from './services/http/index.js';
-import { jsonDecode, jsonEncode, printf } from './utils/base.js';
-import { exists, readString, writeString } from './utils/io.js';
-import { isEmpty } from './utils/is.js';
+import { http } from "./utils/http.js";
+import { jsonDecode, jsonEncode, isEmpty } from "@del-wang/utils";
+import { exists, readString, writeString } from "@del-wang/utils/node";
 
 interface Note {
   id: string;
@@ -15,27 +13,27 @@ interface Note {
 }
 
 const limit = 200;
-const assetsDir = 'data/assets';
-const rawDataPath = 'data/raw.json';
-const noteDataPath = 'data/notes.json';
+const assetsDir = "data/assets";
+const rawDataPath = "data/raw.json";
+const noteDataPath = "data/notes.json";
 const httpConfig = {
   headers: {
-    'User-Agent':
-      'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/109.0',
-    referrer: 'https://i.mi.com/note/h5',
-    cookie: kCookie,
+    "User-Agent":
+      "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/109.0",
+    referrer: "https://i.mi.com/note/h5",
+    cookie: process.env.MI_COOKIE || "",
   },
 };
 
 const getNotes = async () => {
   let datas: any = [];
-  let syncTag = '';
-  const syncPage = async (syncTag = '') => {
+  let syncTag = "";
+  const syncPage = async (syncTag = "") => {
     return (
       await http.get(
         `https://i.mi.com/note/full/page/?ts=${Date.now()}&limit=${limit}&syncTag=${syncTag}`,
         undefined,
-        httpConfig,
+        httpConfig
       )
     )?.data;
   };
@@ -47,7 +45,7 @@ const getNotes = async () => {
       break;
     }
   }
-  await writeString(rawDataPath, jsonEncode(datas) ?? '');
+  await writeString(rawDataPath, jsonEncode(datas) ?? "");
   return datas;
 };
 
@@ -60,24 +58,24 @@ const getNotesFromLocal = async (): Promise<Note[]> => {
   datas = datas.map((e) => {
     const files = e.setting?.data ?? [];
     let content = e.snippet;
-    content = content.replaceAll('<input type="checkbox" />', '- [ ] ');
+    content = content.replaceAll('<input type="checkbox" />', "- [ ] ");
     content = content.replaceAll(
       '<input type="checkbox" checked="true" />',
-      '- [x] ',
+      "- [x] "
     );
     const noteDate = getNoteDate(e.createDate);
     for (const file of files) {
-      const fileId = file.fileId.split('.')[1];
-      const fileType = file.mimeType.split('/')[0];
-      const fileSuffix = file.mimeType.split('/')[1];
+      const fileId = file.fileId.split(".")[1];
+      const fileType = file.mimeType.split("/")[0];
+      const fileSuffix = file.mimeType.split("/")[1];
       const filePath = `${assetsDir}/${noteDate}-${fileId}.${fileSuffix}`;
       const fileLink =
-        fileType === 'image'
+        fileType === "image"
           ? `![](${filePath})`
           : `[${fileType}](${filePath})`;
       content = content.replaceAll(
         `<sound fileid="${file.fileId}" />`,
-        fileLink,
+        fileLink
       );
       content = content.replaceAll(file.fileId, fileLink);
       file.id = file.fileId;
@@ -117,7 +115,7 @@ const downloadAsset = async (id: string, path: string) => {
   return http.download(
     `https://i.mi.com/file/full?type=note_img&fileid=${id}`,
     path,
-    httpConfig,
+    httpConfig
   );
 };
 
@@ -136,13 +134,13 @@ const main = async () => {
     assets.map((e) =>
       (async () => {
         const success = await downloadAsset(e.id, e.path);
-        console.log(e.path, success ? '✅' : '❌');
+        console.log(e.path, success ? "✅" : "❌");
         return success;
-      })(),
-    ),
+      })()
+    )
   );
-  await writeString(noteDataPath, jsonEncode(notes) ?? '');
-  printf('✅ 已完成');
+  await writeString(noteDataPath, jsonEncode(notes) ?? "");
+  console.log("✅ 已完成");
 };
 
 main();

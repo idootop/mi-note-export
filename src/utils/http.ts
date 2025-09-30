@@ -1,9 +1,6 @@
-import fetch from 'node-fetch';
-
-import { jsonDecode, jsonEncode } from '../../utils/base.js';
-import { writeFile } from '../../utils/io.js';
-import { isNotEmpty, isObject } from '../../utils/is.js';
-import pTimeout from '../../utils/p-timeout.js';
+import { isNotEmpty, isObject, jsonDecode, jsonEncode } from "@del-wang/utils";
+import pTimeout from "./p-timeout.js";
+import { writeFile } from "@del-wang/utils/node";
 
 type HttpConfig = {
   timeout?: number;
@@ -26,26 +23,26 @@ export const http = {
   async get<T = any>(
     url: string,
     query?: Record<string, string | number | boolean | undefined>,
-    config?: HttpConfig,
+    config?: HttpConfig
   ): Promise<T | undefined> {
     const { timeout = http.timeout, headers = {}, signal } = config ?? {};
     const newUrl = query ? _buildURL(url, query) : url;
     const response = await pTimeout(
       fetch(newUrl, {
-        method: 'GET',
+        method: "GET",
         headers: {
           ...headers,
         },
         signal,
       }).catch((e) => {
-        if (!e.message?.includes('aborted')) {
-          console.error('❌ 网络异常：', e);
+        if (!e.message?.includes("aborted")) {
+          console.error("❌ 网络异常：", e);
         }
         return undefined;
       }),
-      timeout,
+      timeout
     ).catch(() => {
-      console.error('🕙 请求超时');
+      console.error("🕙 请求超时");
       return undefined;
     });
     let result: any = await response?.text();
@@ -55,27 +52,27 @@ export const http = {
   async post<T = any>(
     url: string,
     data?: any,
-    config?: HttpConfig,
+    config?: HttpConfig
   ): Promise<T | undefined> {
     const { timeout = http.timeout, headers = {}, signal } = config ?? {};
     const body = isObject(data) ? jsonEncode(data) : data;
     const response = await pTimeout(
       fetch(url, {
-        method: 'POST',
+        method: "POST",
         headers: {
           ...headers,
         },
         body,
         signal,
       }).catch((e) => {
-        if (!e.message?.includes('aborted')) {
-          console.error('❌ 网络异常：', e);
+        if (!e.message?.includes("aborted")) {
+          console.error("❌ 网络异常：", e);
         }
         return undefined;
       }),
-      timeout,
+      timeout
     ).catch(() => {
-      console.error('🕙 请求超时');
+      console.error("🕙 请求超时");
       return undefined;
     });
     let result: any = await response?.text();
@@ -91,9 +88,9 @@ export const http = {
         },
         signal,
       }),
-      timeout,
+      timeout
     ).catch(() => {
-      console.error('🕙 请求超时');
+      console.error("🕙 请求超时");
       return undefined;
     });
     if (response?.ok) {

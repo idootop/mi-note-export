@@ -1,4 +1,4 @@
-# 🔧 小米云服务便签批量导出工具
+# 📒 小米笔记备份助手
 
 一键批量备份小米云服务云便签（包含图片，录音等文件），支持导出为 Markdown 格式，并按文件夹分类整理。
 
@@ -25,53 +25,35 @@
 最后，运行以下命令下载便签数据：
 
 ```bash
-yarn && yarn dev
+git clone https://github.com/idootop/mi-note-export.git
+
+cd mi-note-export
+
+docker build -t mi-note-download .
+docker build -t mi-note-web .
+
+# 下载笔记到本地
+docker run -it --rm --env-file $(pwd)/env -v $(pwd)/data:/app/data mi-note-download
+
+# 打开网页查看笔记
+docker run -it --rm --init -p 3000:3000 -v $(pwd)/data:/home/static/data mi-note-web
 ```
 
-不出意外，你的便签数据就会备份到 `data/notes.json` 文件里了，相关的图片和音频文件会保存在 `data/assets` 目录下。
+## 亮点
 
-![](screenshots/demo.jpg)
+1. 一键备份笔记 + 文件（图片/视频/录音）
+2. 自动保存笔记为 Markdown 格式，方便导入其他应用
+3. 内置网页管理界面，可在线浏览笔记，完美还原笔记排版
 
-PS: 便签中的图片，音频等文件，下载到了 `data/assets` 目录下。
+## 注意事项
 
-## 2. 转换为 Markdown 格式
+> [!IMPORTANT]
+> 网页端暂不支持密码访问，公网部署需谨慎，防止泄露隐私信息！🚨
 
-完成原始数据导出后，你可以将便签转换为更通用的 Markdown 格式。运行以下命令：
-
-```bash
-yarn export
-```
-
-这将会在 `data/export` 目录下生成 Markdown 文件，具有以下特点：
-
-- **按文件夹分类**：便签会按照原始的文件夹结构整理到不同的子目录中
-- **保留标题**：如果便签有标题，会被保留并用作文件名的一部分
-- **文件名格式**：`[ID][创建日期][标题].md`，方便排序和查找
-- **图片支持**：所有图片都会被正确导出，并在 Markdown 中保持可访问
-- **元数据保留**：每个便签的创建日期、ID、所属文件夹等信息都会保留在文件中
-
-导出后的目录结构示例：
-
-```
-data/export/
-  ├── assets/                     # 所有图片等资源文件
-  │   ├── image1.jpg
-  │   └── image2.png
-  ├── default/                    # 默认文件夹
-  │   ├── [00000123][2024-03-21][我的笔记].md
-  │   └── [00000124][2024-03-21][购物清单].md
-  └── folder_1/                   # 其他文件夹
-      └── [00000125][2024-03-21][重要文档].md
-```
-
-每个 Markdown 文件都包含完整的便签内容，包括：
-
-- 标题（如果有）
-- 创建日期、ID 等元数据
-- 正文内容
-- 图片（如果有）
-
-PS: 便签中的图片，音频等文件，会被复制到 `data/export/assets` 目录下，并在 Markdown 中使用相对路径引用，确保可以正常显示。
+1. 暂未适配移动端界面，推荐使用电脑访问
+2. 暂不支持备份私密笔记、待办和思维导图
+3. 暂不支持笔记编辑和搜索功能，只能查看已有笔记
+4. 暂不支持断点续下，中途退出后需要重新开始下载
 
 ## License
 

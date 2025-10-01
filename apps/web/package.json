@@ -5,7 +5,7 @@
 	"scripts": {
 		"dev": "vite",
 		"build": "vite build",
-		"start": "vite preview"
+		"preview": "vite preview"
 	},
 	"dependencies": {
 		"@core/node": "file:../node"
@@ -16,6 +16,11 @@
 		"svelte": "^5.39.4",
 		"typescript": "^5.9.2",
 		"vite": "^7.1.7"
+	},
+	"pnpm": {
+		"overrides": {
+			"rollup": "npm:@rollup/wasm-node"
+		}
 	},
 	"packageManager": "pnpm@10.14.0"
 }

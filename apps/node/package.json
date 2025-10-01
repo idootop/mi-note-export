@@ -8,10 +8,7 @@
 	},
 	"scripts": {
 		"build": "tsdown",
-		"download": "tsx --env-file ../../.env src/download.ts"
-	},
-	"bin": {
-		"download-notes": "./dist/download.js"
+		"download": "tsx --env-file ../../env src/download.ts"
 	},
 	"dependencies": {
 		"@del-wang/utils": "^1.5.0",

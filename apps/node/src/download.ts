@@ -1,5 +1,5 @@
 import { formatDate } from "@del-wang/utils";
-import { writeJSON, writeString } from "@del-wang/utils/node";
+import { exists, writeJSON, writeString } from "@del-wang/utils/node";
 import { getNoteDetail, getNoteList } from "./api";
 import { kMarkdownDir, kNotesPath } from "./config";
 import type { NoteDetail, NoteEntry } from "./typing";
@@ -21,6 +21,11 @@ async function getNoteEntries(limit = 200) {
 }
 
 const main = async () => {
+	if (exists(kNotesPath)) {
+		console.log("✅ 笔记数据已存在，跳过下载");
+		console.log("💡 如果需要重新下载，请先删除笔记数据目录");
+		return;
+	}
 	const notes: NoteDetail[] = [];
 	const { entries, folders } = await getNoteEntries();
 	for (let i = 0; i < entries.length; i++) {

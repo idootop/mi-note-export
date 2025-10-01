@@ -22,8 +22,7 @@ dist-ssr
 *.sw?
 
 # Other
-
 .env
-dist
-data
+data/*
+!data/.gitkeep
 apps/web/public/data

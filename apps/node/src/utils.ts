@@ -201,9 +201,11 @@ export function note2html(note: NoteDetail) {
 		'<span style="background-color: $1">$2</span>',
 	);
 
-	// 处理引用块
+	// 处理特殊标签
 	html = html.replace(/<quote>(.*?)<\/quote>/gs, "<blockquote>$1</blockquote>");
-	// 处理删除线
+	html = html.replace(/<b>(.*?)<\/b>/g, "<strong>$1</strong>");
+	html = html.replace(/<i>(.*?)<\/i>/g, "<em>$1</em>");
+	html = html.replace(/<u>(.*?)<\/u>/g, "<u>$1</u>");
 	html = html.replace(/<delete>(.*?)<\/delete>/g, "<del>$1</del>");
 
 	// 处理字体大小标签

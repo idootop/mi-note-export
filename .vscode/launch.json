@@ -2,13 +2,13 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Test",
+      "name": "Run",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/src/index.ts",
-      "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/tsx",
+      "program": "${workspaceFolder}/apps/node/src/download.ts",
+      "runtimeExecutable": "${workspaceFolder}/apps/node/node_modules/.bin/tsx",
       "cwd": "${workspaceRoot}",
-      "envFile": "${workspaceFolder}/.env",
+      "envFile": "${workspaceFolder}/env",
       "internalConsoleOptions": "openOnSessionStart"
     }
   ]

@@ -6,7 +6,7 @@
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/src/index.ts",
-      "runtimeExecutable": "${workspaceFolder}/apps/tests/node_modules/.bin/tsx",
+      "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/tsx",
       "cwd": "${workspaceRoot}",
       "envFile": "${workspaceFolder}/.env",
       "internalConsoleOptions": "openOnSessionStart"

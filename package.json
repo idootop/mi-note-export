@@ -1,18 +1,19 @@
 {
-  "name": "mi-note-export",
-  "version": "1.0.0",
-  "type": "module",
-  "scripts": {
-    "start": "tsx --env-file .env src/index.ts"
-  },
-  "dependencies": {
-    "@del-wang/utils": "^1.4.0"
-  },
-  "devDependencies": {
-    "@del-wang/config": "^1.4.0",
-    "@types/node": "^24.6.0",
-    "tsx": "^4.20.6",
-    "typescript": "^5.9.2"
-  },
-  "packageManager": "pnpm@10.14.0"
+	"name": "mi-note-export",
+	"version": "1.0.0",
+	"type": "module",
+	"scripts": {
+		"download": "tsx --env-file .env src/index.ts"
+	},
+	"dependencies": {
+		"@del-wang/utils": "^1.4.0",
+		"ky": "^1.11.0"
+	},
+	"devDependencies": {
+		"@del-wang/config": "^1.4.0",
+		"@types/node": "^24.6.0",
+		"tsx": "^4.20.6",
+		"typescript": "^5.9.2"
+	},
+	"packageManager": "pnpm@10.14.0"
 }

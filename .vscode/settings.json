@@ -9,6 +9,13 @@
     "source.action.useSortedAttributes.biome": "explicit",
     "source.action.useSortedProperties.biome": "explicit"
   },
+  "svelte.enable-ts-plugin": true,
+  "[svelte]": {
+    "editor.defaultFormatter": "svelte.svelte-vscode",
+    "editor.codeActionsOnSave": {
+      "source.fixAll.biome": "never"
+    }
+  },
   "[prisma]": {
     "editor.defaultFormatter": "Prisma.prisma"
   },

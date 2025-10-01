@@ -3,17 +3,23 @@
 	"version": "1.0.0",
 	"type": "module",
 	"scripts": {
-		"download": "tsx --env-file .env src/index.ts"
+		"dev": "vite",
+		"build": "vite build",
+		"start": "vite preview",
+		"download": "tsx --env-file .env src/download.ts"
 	},
 	"dependencies": {
 		"@del-wang/utils": "^1.4.0",
 		"ky": "^1.11.0"
 	},
 	"devDependencies": {
-		"@del-wang/config": "^1.4.0",
+		"@sveltejs/vite-plugin-svelte": "^6.2.0",
+		"@tsconfig/svelte": "^5.0.5",
 		"@types/node": "^24.6.0",
+		"svelte": "^5.39.4",
 		"tsx": "^4.20.6",
-		"typescript": "^5.9.2"
+		"typescript": "^5.9.2",
+		"vite": "^7.1.7"
 	},
 	"packageManager": "pnpm@10.14.0"
 }

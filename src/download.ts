@@ -1,9 +1,9 @@
 import { formatDate } from "@del-wang/utils";
 import { writeJSON, writeString } from "@del-wang/utils/node";
-import { getNoteDetail, getNoteList } from "./api";
-import { kMarkdownDir, kNotesPath } from "./config";
-import type { NoteDetail, NoteEntry } from "./typing";
-import { note2markdown } from "./utils";
+import { getNoteDetail, getNoteList } from "./core/api";
+import { kMarkdownDir, kNotesPath } from "./core/config";
+import type { NoteDetail, NoteEntry } from "./core/typing";
+import { note2markdown } from "./core/utils";
 
 async function getNoteEntries(limit = 200) {
 	console.log("🔥 获取笔记列表中...");

@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { NoteDetail } from "../core/typing";
-  import { note2html } from "../core/utils";
+  import type { NoteDetail } from "@core/node/typing";
+  import { note2html } from "@core/node/utils";
 
   export let note: NoteDetail | null = null;
 

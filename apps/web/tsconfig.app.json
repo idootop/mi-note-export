@@ -17,5 +17,5 @@
     "checkJs": true,
     "moduleDetection": "force"
   },
-  "include": ["src/main.ts", "src/**/*.svelte"]
+  "include": ["src"]
 }

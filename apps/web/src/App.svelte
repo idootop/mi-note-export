@@ -1,15 +1,15 @@
 <script lang="ts">
+  import type { NoteDetail } from "@core/node/typing";
   import { onMount } from "svelte";
   import NoteList from "./components/NoteList.svelte";
   import NotePreview from "./components/NotePreview.svelte";
-  import type { NoteDetail } from "./core/typing";
 
   let notes: NoteDetail[] = [];
   let folders: Record<string, string> = {};
   let selectedNoteId: string = "";
 
   onMount(async () => {
-    const response = await fetch("/notes.json");
+    const response = await fetch("/data/notes.json");
     const data = await response.json();
     folders = data.folders || {};
     notes = data.notes || [];

@@ -1,0 +1,28 @@
+{
+	"name": "@core/node",
+	"version": "1.0.0",
+	"type": "module",
+	"exports": {
+		".": "./src/index.ts",
+		"./*": "./src/*"
+	},
+	"scripts": {
+		"build": "tsdown",
+		"download": "tsx --env-file ../../.env src/download.ts"
+	},
+	"bin": {
+		"download-notes": "./dist/download.js"
+	},
+	"dependencies": {
+		"@del-wang/utils": "^1.5.0",
+		"ky": "^1.11.0"
+	},
+	"devDependencies": {
+		"@types/node": "^24.6.0",
+		"svelte": "^5.39.4",
+		"tsdown": "^0.15.6",
+		"tsx": "^4.20.6",
+		"typescript": "^5.9.2"
+	},
+	"packageManager": "pnpm@10.14.0"
+}

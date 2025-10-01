@@ -24,6 +24,6 @@ dist-ssr
 # Other
 
 .env
-temp
-public/*
-!public/favicon.ico
+dist
+data
+apps/web/public/data

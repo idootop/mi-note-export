@@ -242,7 +242,7 @@ export function note2html(note: NoteDetail) {
 
 	// 处理文件
 	for (const file of note.files ?? []) {
-		const filePath = `/assets/${file.name}`;
+		const filePath = `/data/assets/${file.name}`;
 		// 处理图片
 		html = html.replace(
 			new RegExp(`<img fileid="${file.rawId}"[^>]*>`, "g"),

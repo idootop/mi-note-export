@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { NoteDetail } from "../core/typing";
+  import type { NoteDetail } from "@core/node/typing";
 
   export let notes: NoteDetail[] = [];
   export let folders: Record<string, string> = {};
@@ -56,7 +56,29 @@
 <div class="note-list-container">
   <!-- 文件夹选择 -->
   <div class="folder-section">
-    <h3>目录</h3>
+    <h3>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <a href="https://github.com/idootop/mi-note-export" target="_blank">
+          <img src="/favicon.ico" style="width: 36px; height: 36px;" />
+        </a>
+        <div style="display: flex; flex-direction: column;">
+          <a
+            href="https://github.com/idootop/mi-note-export"
+            target="_blank"
+            style="text-decoration: none; color: inherit;"
+          >
+            小米笔记备份助手
+            <span style="font-size: 12px; color: #9ca3af;">v1.0.0</span>
+          </a>
+          <span style="font-size: 12px; color: #9ca3af;">
+            Made with ❤️ by
+            <a href="https://del.wang" target="_blank" style="color: #2563eb;">
+              del.wang
+            </a>
+          </span>
+        </div>
+      </div>
+    </h3>
     <div class="folder-list">
       <button
         class="folder-item"
@@ -85,7 +107,6 @@
 
   <!-- 笔记列表 -->
   <div class="notes-section">
-    <h3>笔记列表</h3>
     <div class="notes-list">
       {#if sortedNotes.length === 0}
         <div class="empty-state">

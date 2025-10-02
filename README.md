@@ -29,14 +29,13 @@ git clone https://github.com/idootop/mi-note-export.git
 
 cd mi-note-export
 
-docker build -t mi-note-download .
-docker build -t mi-note-web .
+
 
 # 下载笔记到本地
-docker run -it --rm --env-file $(pwd)/env -v $(pwd)/data:/app/data mi-note-download
+docker run -it --rm --env-file $(pwd)/env -v $(pwd)/data:/app/data idootop/mi-note-download:latest
 
 # 打开网页查看笔记
-docker run -it --rm --init -p 3000:3000 -v $(pwd)/data:/home/static/data mi-note-web
+docker run -it --rm --init -p 3000:3000 -v $(pwd)/data:/home/static/data idootop/mi-note-web:latest
 ```
 
 ## 亮点

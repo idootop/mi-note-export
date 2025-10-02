@@ -21,6 +21,8 @@ node_modules
 
 # Other
 .env
-data/*
-!data/.gitkeep
-apps/web/public/data
+public/*
+!public/data
+public/data/*
+!public/data/.gitkeep
+!apps/web/public/favicon.ico

@@ -3,7 +3,7 @@
 	"version": "1.0.0",
 	"scripts": {
 		"download": "node --env-file env apps/node/dist/download.js",
-		"web": "cp -r apps/web/dist/* data && serve -s data",
+		"web": "cp -r apps/web/dist/* public && serve -s public",
 		"start": "pnpm download && pnpm web"
 	},
 	"packageManager": "pnpm@10.14.0",

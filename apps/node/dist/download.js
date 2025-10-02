@@ -578,9 +578,9 @@ var distribution_default = ky;
 
 //#endregion
 //#region src/config.ts
-const kAssetsDir = "data/assets";
-const kMarkdownDir = "data/markdown";
-const kNotesPath = "data/notes.json";
+const kAssetsDir = "public/data/assets";
+const kMarkdownDir = "public/data/markdown";
+const kNotesPath = "public/data/notes.json";
 
 //#endregion
 //#region src/utils.ts
@@ -637,7 +637,10 @@ function note2markdown(note) {
 	markdown = markdown.replace(/<center>(.*?)<\/center>/g, "<center>$1</center>");
 	markdown = markdown.replace(/<left>(.*?)<\/left>/g, "<div align=\"left\">$1</div>");
 	markdown = markdown.replace(/<right>(.*?)<\/right>/g, "<div align=\"right\">$1</div>");
-	markdown = markdown.replace(/<background color="([^"]+)">(.*?)<\/background>/g, "<span style=\"background-color: $1\">$2</span>");
+	markdown = markdown.replace(/<background color="([^"]+)">(.*?)<\/background>/g, (_, color, content) => {
+		color = `#${color.slice(3)}${color.slice(1, 3)}`;
+		return `<span style="background-color: ${color};">${content}</span>`;
+	});
 	markdown = markdown.replace(/<size>(.*?)<\/size>/g, "# $1");
 	markdown = markdown.replace(/<mid-size>(.*?)<\/mid-size>/g, "## $1");
 	markdown = markdown.replace(/<h3-size>(.*?)<\/h3-size>/g, "### $1");

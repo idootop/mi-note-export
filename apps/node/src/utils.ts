@@ -91,7 +91,10 @@ export function note2markdown(note: NoteDetail) {
 	// 6. 处理背景色（保留 HTML）
 	markdown = markdown.replace(
 		/<background color="([^"]+)">(.*?)<\/background>/g,
-		'<span style="background-color: $1">$2</span>',
+		(_, color, content) => {
+			color = `#${color.slice(3)}${color.slice(1, 3)}`;
+			return `<span style="background-color: ${color};">${content}</span>`;
+		},
 	);
 
 	// 7. 处理字体大小标签
@@ -198,13 +201,16 @@ export function note2html(note: NoteDetail) {
 	// 处理背景色
 	html = html.replace(
 		/<background color="([^"]+)">(.*?)<\/background>/g,
-		'<span style="background-color: $1">$2</span>',
+		(_, color, content) => {
+			color = `#${color.slice(3)}${color.slice(1, 3)}`;
+			return `<span style="background-color: ${color};">${content}</span>`;
+		},
 	);
 
 	// 处理特殊标签
 	html = html.replace(/<quote>(.*?)<\/quote>/gs, "<blockquote>$1</blockquote>");
 	html = html.replace(/<b>(.*?)<\/b>/g, "<strong>$1</strong>");
-	html = html.replace(/<i>(.*?)<\/i>/g, "<em>$1</em>");
+	html = html.replace(/<i>(.*?)<\/i>/g, "<i>$1</i>");
 	html = html.replace(/<u>(.*?)<\/u>/g, "<u>$1</u>");
 	html = html.replace(/<delete>(.*?)<\/delete>/g, "<del>$1</del>");
 

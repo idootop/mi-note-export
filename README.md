@@ -1,72 +1,93 @@
-# 🔧 小米云服务便签批量导出工具
+# 🐰 小米笔记备份助手
 
-一键批量备份小米云服务云便签（包含图片，录音等文件），支持导出为 Markdown 格式，并按文件夹分类整理。
+一键批量备份小米笔记（包含图片、录音等文件），支持导出为 Markdown 格式，并按文件夹分类整理。
 
-# ✨ 动机
+![](screenshots/banner.png)
 
-犹记得我最后一部使用过的小米手机是，红米 note 4X，当年的千元机之王，陪我走过了大学的青春岁月，记录了许多美好回忆。
+## 项目亮点
 
-不过自从大学毕业后，我就再也没有用过小米手机。直到有一天，邮箱里收到了，小米云服务存储数据即将清空的邮件，WTF！
+1. 一键批量备份小米笔记 + 文件（图片/视频/录音）
+2. 自动保存笔记为 Markdown 格式，方便导入其他应用
+3. 内置网页管理界面，可在线浏览笔记，完美还原笔记排版
 
-![](screenshots/mi.jpg)
+## 项目背景
 
-本以为云服务里的数据是永久保存的，得亏我经常看邮件，不然一个月之后，里面存的便签和短信记录就都被清空了～
+犹记得我使用过的最后一部小米手机是 [红米 Note 4X](https://www.mi.com/redminote4x) —— 当年的千元机性价比之王，陪我走过了大学的青春岁月，记录了许多美好回忆。
 
-但最蛋疼的是，这丫不支持批量导出便笺/笔记！！！ 没办法，只能自己造轮子了～
+不过当我大学毕业，工作之后，就再没用过小米手机。
 
-# 💡 使用方法
+直到有一天，我在邮箱里收到了「小米云服务存储数据即将清空」的通知邮件。
 
-## 1. 导出原始数据
+![](screenshots/email.webp)
 
-首先，在浏览器登录你的小米云服务账号。
+WTF？！！！
 
-然后，复制 cookie 到 `.env` 文件中（参考 `.env.example`）
+我原以为小米云服务里的数据是永久保存的，原来长时间不用会被清空！
 
-最后，运行以下命令下载便签数据：
+幸亏我有经常看邮件的习惯，不然一个月之后就追悔莫及了。
 
-```bash
-yarn && yarn dev
-```
+不过遗憾的是，官方并没有提供「批量导出笔记」的功能。
 
-不出意外，你的便签数据就会备份到 `data/notes.json` 文件里了，相关的图片和音频文件会保存在 `data/assets` 目录下。
+没办法，只能自己造轮子了～
 
-![](screenshots/demo.jpg)
+## 快速开始
 
-## 2. 转换为 Markdown 格式
-
-完成原始数据导出后，你可以将便签转换为更通用的 Markdown 格式。运行以下命令：
+首先，克隆项目到本地，并按教程获取并更新 [env](./env) 配置文件中的 [Cookie](https://github.com/idootop/mi-note-export/issues/4)。
 
 ```bash
-yarn export
+# 克隆项目源码
+git clone https://github.com/idootop/mi-note-export.git
+
+# 进入项目根目录
+cd mi-note-export
 ```
 
-这将会在 `data/export` 目录下生成 Markdown 文件，具有以下特点：
+保存 [Cookie](https://github.com/idootop/mi-note-export/issues/4) 到 env 文件之后，运行以下命令下载笔记数据，打开网页 http://localhost:3000 即可查看。
 
-- **按文件夹分类**：便签会按照原始的文件夹结构整理到不同的子目录中
-- **保留标题**：如果便签有标题，会被保留并用作文件名的一部分
-- **文件名格式**：`[ID][创建日期][标题].md`，方便排序和查找
-- **图片支持**：所有图片都会被正确导出，并在 Markdown 中保持可访问
-- **元数据保留**：每个便签的创建日期、ID、所属文件夹等信息都会保留在文件中
+```bash
+# 下载笔记到本地
+docker run -it --rm --env-file $(pwd)/env -v $(pwd)/public/data:/app/public/data idootop/mi-note-download:latest
 
-导出后的目录结构示例：
-
-```
-data/export/
-  ├── assets/                     # 所有图片等资源文件
-  │   ├── image1.jpg
-  │   └── image2.png
-  ├── default/                    # 默认文件夹
-  │   ├── [00000123][2024-03-21][我的笔记].md
-  │   └── [00000124][2024-03-21][购物清单].md
-  └── folder_1/                   # 其他文件夹
-      └── [00000125][2024-03-21][重要文档].md
+# 打开网页查看笔记 http://localhost:3000
+docker run -it --rm --init -p 3000:3000 -v $(pwd)/public/data:/home/static/data idootop/mi-note-web:latest
 ```
 
-每个 Markdown 文件都包含完整的便签内容，包括：
+如果你有 [Node.js](https://nodejs.org/zh-cn/download) 运行环境，也可以直接运行该项目，无需下载 Docker 镜像。
 
-- 标题（如果有）
-- 创建日期、ID 等元数据
-- 正文内容
-- 图片（如果有）
+```bash
+# 安装依赖并运行
+pnpm install && pnpm start
+```
 
-PS: 便签中的图片，音频等文件，会被复制到 `data/export/assets` 目录下，并在 Markdown 中使用相对路径引用，确保可以正常显示。
+## 常见问题
+
+### Markdown 格式的笔记保存在哪里？
+
+笔记数据下载完成后，会将 Markdown 格式的笔记文件保存到 `public/data/markdown` 目录下。
+
+笔记中的图片、录音等文件，则保存在 `public/data/assets` 目录。
+
+### 401 Unauthorized Error: 获取笔记列表失败
+
+你还没有设置 Cookie 或者 Cookie 已过期。
+
+请刷新网页，按教程重新获取 Cookie 后，更新到 [env](./env) 文件中重新运行。
+
+### 找不到命令 / Command not found
+
+对于 Windows 操作系统用户，推荐下载 [Git for Windows](https://git-scm.com/downloads)，然后使用 Git Bash 终端运行教程中的命令。
+使用 CMD 命令提示符或 PowerShell 运行可能会有兼容性问题，导致异常发生。
+
+## 注意事项
+
+> [!IMPORTANT]
+> 网页端暂不支持密码访问，公网部署需谨慎，防止泄露隐私信息！🚨
+
+1. 暂未适配移动端界面，推荐使用电脑访问
+2. 暂不支持备份私密笔记、待办和思维导图
+3. 暂不支持笔记编辑和搜索功能，只能查看已有笔记
+4. 暂不支持断点续下，中途退出后需要重新开始下载
+
+## License
+
+MIT License © 2022-PRESENT [Del Wang](https://del.wang)

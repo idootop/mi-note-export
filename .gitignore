@@ -1,6 +1,28 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
 node_modules
-build
-.env
+*.local
+
+# Editor directories and files
+.idea
 .DS_Store
-data
-**/.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Other
+.env
+public/*
+!public/data
+public/data/*
+!public/data/.gitkeep
+!apps/web/public/favicon.ico

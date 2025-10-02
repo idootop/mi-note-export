@@ -2,46 +2,14 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "CurrentFile",
+      "name": "Run",
       "type": "node",
       "request": "launch",
-      "args": ["${workspaceFolder}/${relativeFile}"],
-      "runtimeArgs": [
-        "--loader",
-        "ts-node/esm",
-        "-r",
-        "ts-node/register",
-        "-r",
-        "tsconfig-paths/register",
-        "-r",
-        "./src/disable-experimental-warning.cjs"
-      ],
+      "program": "${workspaceFolder}/apps/node/src/download.ts",
+      "runtimeExecutable": "${workspaceFolder}/apps/node/node_modules/.bin/tsx",
       "cwd": "${workspaceRoot}",
-      "internalConsoleOptions": "openOnSessionStart",
-      "env": {
-        "NODE_ENV": "development"
-      }
-    },
-    {
-      "name": "Index.ts",
-      "type": "node",
-      "request": "launch",
-      "args": ["${workspaceFolder}/src/index.ts"],
-      "runtimeArgs": [
-        "--loader",
-        "ts-node/esm",
-        "-r",
-        "ts-node/register",
-        "-r",
-        "tsconfig-paths/register",
-        "-r",
-        "./src/disable-experimental-warning.cjs"
-      ],
-      "cwd": "${workspaceRoot}",
-      "internalConsoleOptions": "openOnSessionStart",
-      "env": {
-        "NODE_ENV": "development"
-      }
+      "envFile": "${workspaceFolder}/env",
+      "internalConsoleOptions": "openOnSessionStart"
     }
   ]
 }

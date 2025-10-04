@@ -2,9 +2,9 @@
 	"name": "mi-note-export",
 	"version": "1.0.0",
 	"scripts": {
-		"download": "node --env-file env apps/node/dist/download.js",
+		"sync": "node --env-file env apps/node/dist/sync.js",
 		"web": "cp -r apps/web/dist/* public && serve -s public",
-		"start": "pnpm download && pnpm web"
+		"start": "pnpm sync && pnpm web"
 	},
 	"packageManager": "pnpm@10.14.0",
 	"devDependencies": {

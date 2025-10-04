@@ -9,6 +9,7 @@
 1. 一键批量备份小米笔记 + 文件（图片/视频/录音）
 2. 自动保存笔记为 Markdown 格式，方便导入其他应用
 3. 内置网页管理界面，可在线浏览笔记，完美还原笔记排版
+4. 支持增量更新，自动检测并处理笔记和文件夹的重命名和删除
 
 ## 项目背景
 
@@ -38,11 +39,11 @@ git clone https://github.com/idootop/mi-note-export.git
 cd mi-note-export
 ```
 
-保存 [Cookie](https://github.com/idootop/mi-note-export/issues/4) 到 env 文件之后，运行以下命令下载笔记数据，打开网页 http://localhost:3000 即可查看。
+保存 [Cookie](https://github.com/idootop/mi-note-export/issues/4) 到 env 文件之后，运行以下命令同步笔记数据，打开网页 http://localhost:3000 即可查看。
 
 ```bash
-# 下载笔记到本地
-docker run -it --rm --env-file $(pwd)/env -v $(pwd)/public/data:/app/public/data idootop/mi-note-download:latest
+# 同步最新笔记数据
+docker run -it --rm --env-file $(pwd)/env -v $(pwd)/public/data:/app/public/data idootop/mi-note-sync:latest
 
 # 打开网页查看笔记 http://localhost:3000
 docker run -it --rm --init -p 3000:3000 -v $(pwd)/public/data:/home/static/data idootop/mi-note-web:latest
@@ -79,10 +80,9 @@ pnpm install && pnpm start
 > [!IMPORTANT]
 > 网页端暂不支持密码访问，公网部署需谨慎，防止泄露隐私信息！🚨
 
-1. 暂未适配移动端界面，推荐使用电脑访问
-2. 暂不支持备份私密笔记、待办和思维导图
-3. 暂不支持笔记编辑和搜索功能，只能查看已有笔记
-4. 暂不支持断点续下，中途退出后需要重新开始下载
+1. 暂不支持备份私密笔记、待办和思维导图
+2. 暂不支持编辑笔记和搜索功能，仅支持查看笔记
+3. 网页端暂未适配 Mobile 界面，推荐使用电脑访问
 
 ## License
 

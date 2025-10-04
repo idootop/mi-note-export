@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import { rename, rm } from "node:fs/promises";
 
 //#region node_modules/.pnpm/@del-wang+utils@1.5.0_@types+node@24.6.1/node_modules/@del-wang/utils/dist/core/object.js
 function jsonEncode(obj, options) {
@@ -30,22 +31,18 @@ function removeNullish(data) {
 }
 
 //#endregion
-//#region node_modules/.pnpm/@del-wang+utils@1.5.0_@types+node@24.6.1/node_modules/@del-wang/utils/dist/core/time.js
-const kOneSecond = 1e3;
-const kOneMinute = 60 * kOneSecond;
-const kOneHour = 60 * kOneMinute;
-const kOneDay = 24 * kOneHour;
-/**
-* 2024-01-01
-*/
-function formatDate(timestamp$1, offset = 0) {
-	return new Date(timestamp$1 + offset * 36e5).toISOString().substring(0, 10);
-}
-
-//#endregion
 //#region node_modules/.pnpm/@del-wang+utils@1.5.0_@types+node@24.6.1/node_modules/@del-wang/utils/dist/node/io.js
 const kRoot = process.cwd();
 const exists = (filePath) => fs.existsSync(filePath);
+const readFile = async (filePath, options) => {
+	const dirname = path.dirname(filePath);
+	if (!fs.existsSync(dirname)) return;
+	return await new Promise((resolve) => {
+		fs.readFile(filePath, options, (err, data) => {
+			resolve(err ? void 0 : data);
+		});
+	});
+};
 const writeFile = async (filePath, data, options) => {
 	if (!data) return false;
 	const dirname = path.dirname(filePath);
@@ -60,6 +57,7 @@ const writeFile = async (filePath, data, options) => {
 	});
 };
 const writeString = (filePath, content) => writeFile(filePath, content, "utf8");
+const readJSON = async (filePath) => jsonDecode(await readFile(filePath, "utf8"));
 const writeJSON = (filePath, content) => writeFile(filePath, jsonEncode(content) ?? "", "utf8");
 
 //#endregion
@@ -581,6 +579,20 @@ var distribution_default = ky;
 const kAssetsDir = "public/data/assets";
 const kMarkdownDir = "public/data/markdown";
 const kNotesPath = "public/data/notes.json";
+const kStatePath = "public/data/state.json";
+
+//#endregion
+//#region node_modules/.pnpm/@del-wang+utils@1.5.0_@types+node@24.6.1/node_modules/@del-wang/utils/dist/core/time.js
+const kOneSecond = 1e3;
+const kOneMinute = 60 * kOneSecond;
+const kOneHour = 60 * kOneMinute;
+const kOneDay = 24 * kOneHour;
+/**
+* 2024-01-01
+*/
+function formatDate(timestamp$1, offset = 0) {
+	return new Date(timestamp$1 + offset * 36e5).toISOString().substring(0, 10);
+}
 
 //#endregion
 //#region src/utils.ts
@@ -606,19 +618,26 @@ function parseNoteFiles(note) {
 function sanitizePath(filename) {
 	return filename.replace(/[/\\?%*:|"<>]/g, "_").replace(/\s+/g, "_").replace(/_{2,}/g, "_").toLowerCase();
 }
-function parseNoteRawData(_note, folders) {
+function getFolderDir(folderName) {
+	return `${kMarkdownDir}/${sanitizePath(folderName)}`;
+}
+/**
+* 生成笔记文件路径
+*/
+function getNoteFilePath(note, folders) {
+	const name = `${formatDate(note.createDate)}_${note.subject}.md`;
+	const folderName = folders[note.folderId];
+	return `${kMarkdownDir}/${folderName}/${name}`;
+}
+function parseNoteRawData(_note, _folders) {
 	const note = _note;
 	const extraInfo = jsonDecode(note.extraInfo) || {};
 	note.id = note.id.toString();
 	note.extraInfo = extraInfo;
 	if (!note.content) note.content = note.snippet;
 	if (extraInfo.mind_content) note.content = extraInfo.mind_content;
-	note.subject = extraInfo.title || note.content.slice(0, 10) || "未命名";
+	note.subject = extraInfo.title || note.content.split("\n")[0].slice(0, 10) || "未命名";
 	note.subject = sanitizePath(note.subject);
-	if (folders) {
-		note.folderName = folders[note.folderId] || "未分类";
-		note.folderName = sanitizePath(note.folderName);
-	}
 	if (note.setting?.data) note.files = parseNoteFiles(note);
 	return note;
 }
@@ -709,8 +728,13 @@ async function download(url, path$1) {
 }
 async function getNoteList(syncTag, limit = 200) {
 	const res = await get(`https://i.mi.com/note/full/page/?ts=${Date.now()}&limit=${limit}&syncTag=${syncTag}`);
-	if (!res?.data?.entries) throw new Error(`获取笔记列表失败 ${syncTag}`);
-	const folders = Object.fromEntries(res.data.folders.map((folder) => [folder.id, folder.subject]));
+	if (!res?.data?.entries) {
+		const divider = "-----------------------------------------------------------------------";
+		const tips = `\n${divider}\n👉 获取 Cookie 教程: https://github.com/idootop/mi-note-export/issues/4\n${divider}`;
+		if (!process.env.MI_COOKIE || process.env.MI_COOKIE.startsWith("xxx")) throw new Error(`❌ Cookie 未设置，请在 env 文件中设置 MI_COOKIE 后重试。${tips}`);
+		throw new Error(`获取笔记列表失败 ${syncTag}\n❌ 当前 Cookie 无效或已过期，请更新 Cookie 后重试。${tips}`);
+	}
+	const folders = Object.fromEntries(res.data.folders.map((folder) => [folder.id, sanitizePath(folder.subject)]));
 	return {
 		syncTag: res.data.lastPage ? void 0 : res.data.syncTag,
 		notes: res.data.entries.map((entry) => parseNoteRawData(entry, folders)),
@@ -730,11 +754,48 @@ async function getNoteDetail(id, folders) {
 }
 
 //#endregion
-//#region src/download.ts
+//#region src/state.ts
+/**
+* 加载同步状态
+*/
+async function loadState() {
+	if (!exists(kStatePath)) return null;
+	try {
+		return await readJSON(kStatePath);
+	} catch {
+		console.warn("⚠️  读取状态文件失败，将重新开始同步");
+		return null;
+	}
+}
+/**
+* 保存同步状态
+*/
+async function saveState(state) {
+	await writeJSON(kStatePath, state);
+	await writeJSON(kNotesPath, {
+		folders: state.folders,
+		notes: Object.values(state.notes)
+	});
+}
+/**
+* 创建新的同步状态
+*/
+function createEmptyState() {
+	return {
+		lastSyncTime: 0,
+		notes: {},
+		folders: {},
+		noteFilePaths: {},
+		folderPaths: {}
+	};
+}
+
+//#endregion
+//#region src/sync.ts
 async function getNoteEntries(limit = 200) {
 	console.log("🔥 获取笔记列表中...");
 	let entries = [];
-	let folders = {};
+	let folders = { "0": "未分类" };
 	let syncTag = "";
 	while (syncTag != null) {
 		const res = await getNoteList(syncTag, limit);
@@ -752,33 +813,113 @@ async function getNoteEntries(limit = 200) {
 	};
 }
 const main = async () => {
-	if (exists(kNotesPath)) {
-		console.log("✅ 笔记数据已存在，跳过下载");
-		console.log("💡 如果需要重新下载，请先删除笔记数据目录");
-		return;
+	let state = await loadState();
+	if (!state) {
+		state = createEmptyState();
+		console.log("🚗 开始同步笔记");
+	} else {
+		console.log("♻️ 检测到之前的同步记录，将进行增量更新");
+		console.log(`📊 已有 ${Object.keys(state.notes).length} 条笔记`);
 	}
-	const notes = [];
 	const { entries, folders } = await getNoteEntries();
-	for (let i = 0; i < entries.length; i++) {
-		const entry = entries[i];
-		const progress = (i + 1) / entries.length * 100;
-		console.log(`🔥 正在下载第 ${i + 1}/${entries.length} 条笔记 (${progress.toFixed(2)}%)...`);
-		const note = await getNoteDetail(entry.id, folders);
-		const markdown = note2markdown(note);
-		const name = `${formatDate(note.createDate)}_${note.subject}.md`;
-		await writeString(`${kMarkdownDir}/${note.folderName}/${name}`, markdown);
-		notes.push(note);
+	await updateNotes(state, entries);
+	await updateFolders(state, folders);
+	const toSync = [];
+	let skipped = 0;
+	for (const entry of entries) {
+		const existingNote = state.notes[entry.id];
+		if (!existingNote || existingNote.modifyDate < entry.modifyDate) toSync.push(entry);
+		else skipped++;
 	}
-	if (notes.length > 0) await writeJSON(kNotesPath, {
-		notes,
-		folders
-	});
-	console.log("✅ 下载完毕");
+	if (toSync.length > 0) console.log(`🔥 需要同步 ${toSync.length} 条笔记`);
+	if (skipped > 0) console.log(`⏭️  跳过 ${skipped} 条未修改的笔记`);
+	let synced = 0;
+	let failed = 0;
+	for (let i = 0; i < toSync.length; i++) {
+		const entry = toSync[i];
+		if (!entry) continue;
+		const progress = (i + 1) / toSync.length * 100;
+		console.log(`🔥 正在同步第 ${i + 1}/${toSync.length} 条笔记 (${progress.toFixed(2)}%)...`);
+		try {
+			const note = await getNoteDetail(entry.id, folders);
+			const markdown = note2markdown(note);
+			const filePath = getNoteFilePath(note, folders);
+			const existingNote = state.notes[note.id];
+			if (existingNote) {
+				const oldFilePath = getNoteFilePath(existingNote, folders);
+				if (oldFilePath !== filePath && exists(oldFilePath)) await rm(oldFilePath, { force: true });
+			}
+			await writeString(filePath, markdown || " ");
+			state.notes[note.id] = note;
+			state.noteFilePaths[note.id] = filePath;
+			synced++;
+			if ((i + 1) % 10 === 0) {
+				state.lastSyncTime = Date.now();
+				await saveState(state);
+			}
+		} catch (e) {
+			console.error(`❌ 同步笔记 ${entry.id} 失败:`, e);
+			failed++;
+		}
+	}
+	state.lastSyncTime = Date.now();
+	await saveState(state);
+	console.log("\n✅ 同步完毕");
+	console.log(`  - 总笔记数: ${entries.length}`);
+	console.log(`  - 本次同步: ${synced}`);
+	if (skipped > 0) console.log(`  - 跳过: ${skipped}`);
+	if (failed > 0) console.log(`  - 失败: ${failed}`);
 };
 main().catch((e) => {
 	console.error(e);
 	process.exit(1);
 });
+async function updateNotes(state, entries) {
+	const currentNoteIds = new Set(entries.map((e) => e.id));
+	const deletedNotes = [];
+	for (const noteId of Object.keys(state.notes)) if (!currentNoteIds.has(noteId)) deletedNotes.push(noteId);
+	if (deletedNotes.length > 0) {
+		console.log(`🗑️ 清理 ${deletedNotes.length} 个已删除的笔记`);
+		for (const noteId of deletedNotes) {
+			const filePath = state.noteFilePaths[noteId];
+			if (filePath && exists(filePath)) {
+				await rm(filePath, { force: true });
+				console.log(`  ❌ 删除: ${filePath}`);
+			}
+			delete state.notes[noteId];
+			delete state.noteFilePaths[noteId];
+		}
+	}
+}
+async function updateFolders(state, newFolders) {
+	const deletedFolders = [];
+	for (const folderId of Object.keys(state.folders)) if (!newFolders[folderId]) deletedFolders.push(folderId);
+	if (deletedFolders.length > 0) {
+		console.log(`🗑️  清理 ${deletedFolders.length} 个已删除的文件夹`);
+		for (const folderId of deletedFolders) {
+			const oldPath = getFolderDir(state.folders[folderId]);
+			if (exists(oldPath)) {
+				await rm(oldPath, {
+					force: true,
+					recursive: true
+				});
+				console.log(`  ❌ 删除: ${oldPath}`);
+			}
+		}
+	}
+	for (const [folderId, newName] of Object.entries(newFolders)) {
+		const oldName = state.folders[folderId];
+		if (oldName && oldName !== newName) {
+			console.log(`📁 重命名分类: ${oldName} -> ${newName}`);
+			const oldPath = getFolderDir(oldName);
+			const newPath = getFolderDir(newName);
+			if (exists(oldPath)) await rename(oldPath, newPath);
+		}
+	}
+	state.folders = newFolders;
+	state.folderPaths = Object.fromEntries(Object.entries(newFolders).map(([folderId, folderName]) => [folderId, getFolderDir(folderName)]));
+	await saveState(state);
+}
 
 //#endregion
 export {  };

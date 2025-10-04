@@ -1,4 +1,5 @@
 import { formatDate, jsonDecode } from "@del-wang/utils";
+import { kMarkdownDir } from "./config";
 import type { NoteDetail, NoteEntry, NoteFile } from "./typing";
 
 function parseNoteFiles(note: NoteEntry): NoteFile[] {
@@ -15,7 +16,7 @@ function parseNoteFiles(note: NoteEntry): NoteFile[] {
 	return result;
 }
 
-function sanitizePath(filename: string): string {
+export function sanitizePath(filename: string): string {
 	return filename
 		.replace(/[/\\?%*:|"<>]/g, "_")
 		.replace(/\s+/g, "_")
@@ -23,9 +24,25 @@ function sanitizePath(filename: string): string {
 		.toLowerCase();
 }
 
+export function getFolderDir(folderName: string): string {
+	return `${kMarkdownDir}/${sanitizePath(folderName)}`;
+}
+
+/**
+ * 生成笔记文件路径
+ */
+export function getNoteFilePath(
+	note: NoteDetail,
+	folders: Record<string, string>,
+): string {
+	const name = `${formatDate(note.createDate)}_${note.subject}.md`;
+	const folderName = folders[note.folderId];
+	return `${kMarkdownDir}/${folderName}/${name}`;
+}
+
 export function parseNoteRawData(
 	_note: NoteEntry,
-	folders?: Record<string, string>,
+	_folders?: Record<string, string>,
 ): NoteDetail {
 	const note = _note as NoteDetail;
 	const extraInfo = jsonDecode(note.extraInfo as any) || {};
@@ -37,12 +54,9 @@ export function parseNoteRawData(
 	if (extraInfo.mind_content) {
 		note.content = extraInfo.mind_content;
 	}
-	note.subject = extraInfo.title || note.content.slice(0, 10) || "未命名";
+	note.subject =
+		extraInfo.title || note.content.split("\n")[0].slice(0, 10) || "未命名";
 	note.subject = sanitizePath(note.subject);
-	if (folders) {
-		note.folderName = folders[note.folderId] || "未分类";
-		note.folderName = sanitizePath(note.folderName);
-	}
 	if (note.setting?.data) {
 		note.files = parseNoteFiles(note);
 	}

@@ -33,10 +33,6 @@
         <span class="meta-item">创建时间: {formatDate(note.createDate)}</span>
         <span class="meta-divider">·</span>
         <span class="meta-item">修改时间: {formatDate(note.modifyDate)}</span>
-        {#if note.folderName}
-          <span class="meta-divider">·</span>
-          <span class="meta-item folder">📂 {note.folderName}</span>
-        {/if}
       </div>
     </div>
 

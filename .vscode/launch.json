@@ -5,7 +5,7 @@
       "name": "Run",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/apps/node/src/download.ts",
+      "program": "${workspaceFolder}/apps/node/src/sync.ts",
       "runtimeExecutable": "${workspaceFolder}/apps/node/node_modules/.bin/tsx",
       "cwd": "${workspaceRoot}",
       "envFile": "${workspaceFolder}/env",

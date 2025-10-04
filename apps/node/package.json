@@ -8,7 +8,7 @@
 	},
 	"scripts": {
 		"build": "tsdown",
-		"download": "tsx --env-file ../../env src/download.ts"
+		"sync": "tsx --env-file ../../env src/sync.ts"
 	},
 	"dependencies": {
 		"@del-wang/utils": "^1.5.0",

@@ -1,7 +1,7 @@
 import { defineConfig } from "tsdown";
 
 export default defineConfig({
-	entry: ["./src/download.ts"],
+	entry: ["./src/sync.ts"],
 	outDir: "dist",
 	target: "node20",
 	noExternal: [/.*/],

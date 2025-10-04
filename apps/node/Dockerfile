@@ -4,5 +4,5 @@ WORKDIR /app
 
 COPY ./dist .
 
-CMD ["bun", "download.js"]
+CMD ["bun", "sync.js"]
 

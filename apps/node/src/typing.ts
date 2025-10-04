@@ -77,10 +77,6 @@ export interface NoteDetail extends NoteEntry {
 	 * 文件附件
 	 */
 	files: NoteFile[];
-	/**
-	 * 文件夹名称
-	 */
-	folderName: string;
 }
 
 export interface NoteListResponse {

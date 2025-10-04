@@ -2,7 +2,7 @@ import { exists, writeFile } from "@del-wang/utils/node";
 import ky from "ky";
 import { kAssetsDir } from "./config";
 import type { NoteDetailResponse, NoteListResponse } from "./typing";
-import { parseNoteRawData } from "./utils";
+import { parseNoteRawData, sanitizePath } from "./utils";
 
 const api = ky.extend({
 	headers: {
@@ -52,10 +52,20 @@ export async function getNoteList(syncTag?: string, limit = 200) {
 		`https://i.mi.com/note/full/page/?ts=${Date.now()}&limit=${limit}&syncTag=${syncTag}`,
 	);
 	if (!res?.data?.entries) {
-		throw new Error(`获取笔记列表失败 ${syncTag}`);
+		const divider =
+			"-----------------------------------------------------------------------";
+		const tips = `\n${divider}\n👉 获取 Cookie 教程: https://github.com/idootop/mi-note-export/issues/4\n${divider}`;
+		if (!process.env.MI_COOKIE || process.env.MI_COOKIE.startsWith("xxx")) {
+			throw new Error(
+				`❌ Cookie 未设置，请在 env 文件中设置 MI_COOKIE 后重试。${tips}`,
+			);
+		}
+		throw new Error(
+			`获取笔记列表失败 ${syncTag}\n❌ 当前 Cookie 无效或已过期，请更新 Cookie 后重试。${tips}`,
+		);
 	}
 	const folders = Object.fromEntries(
-		res.data.folders.map((folder) => [folder.id, folder.subject]),
+		res.data.folders.map((folder) => [folder.id, sanitizePath(folder.subject)]),
 	);
 	return {
 		syncTag: res.data.lastPage ? undefined : res.data.syncTag,

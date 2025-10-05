@@ -6,14 +6,35 @@
   export let selectedNoteId: string = "";
   export let selectedFolder: string = "0";
 
+  let searchQuery: string = "";
+
   // 获取所有文件夹列表
   $: folderList = Object.entries(folders).map(([id, name]) => ({ id, name }));
 
   // 根据选中的文件夹过滤笔记
   $: filteredNotes = notes.filter((note) => note.folderId === selectedFolder);
 
+  // 根据搜索关键词过滤笔记
+  $: searchedNotes = searchQuery.trim()
+    ? filteredNotes.filter((note) => {
+        const query = searchQuery.toLowerCase();
+        const title = (
+          note.extraInfo?.title ||
+          note.subject ||
+          ""
+        ).toLowerCase();
+        const content = (note.content || "").toLowerCase();
+        const snippet = (note.snippet || "").toLowerCase();
+        return (
+          title.includes(query) ||
+          content.includes(query) ||
+          snippet.includes(query)
+        );
+      })
+    : filteredNotes;
+
   // 按修改时间降序排序
-  $: sortedNotes = [...filteredNotes].sort(
+  $: sortedNotes = [...searchedNotes].sort(
     (a, b) => b.modifyDate - a.modifyDate
   );
 
@@ -91,12 +112,30 @@
     </div>
   </div>
 
+  <!-- 搜索框 -->
+  <div class="search-section">
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input
+        type="text"
+        placeholder="搜索笔记..."
+        bind:value={searchQuery}
+        class="search-input"
+      />
+      {#if searchQuery}
+        <button class="clear-button" on:click={() => (searchQuery = "")}>
+          ✕
+        </button>
+      {/if}
+    </div>
+  </div>
+
   <!-- 笔记列表 -->
   <div class="notes-section">
     <div class="notes-list">
       {#if sortedNotes.length === 0}
         <div class="empty-state">
-          <p>暂无笔记</p>
+          <p>{searchQuery ? "未找到匹配的笔记" : "暂无笔记"}</p>
         </div>
       {:else}
         {#each sortedNotes as note}
@@ -146,6 +185,64 @@
 
   .folder-list {
     padding: 8px;
+  }
+
+  .search-section {
+    flex-shrink: 0;
+    padding: 12px;
+    border-bottom: 1px solid #e5e7eb;
+    background: #fff;
+  }
+
+  .search-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 8px 12px;
+    transition: all 0.2s;
+  }
+
+  .search-box:focus-within {
+    background: #fff;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  }
+
+  .search-icon {
+    font-size: 16px;
+    margin-right: 8px;
+    opacity: 0.5;
+  }
+
+  .search-input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    outline: none;
+    font-size: 14px;
+    color: #111827;
+  }
+
+  .search-input::placeholder {
+    color: #9ca3af;
+  }
+
+  .clear-button {
+    padding: 4px;
+    border: none;
+    background: transparent;
+    color: #9ca3af;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1;
+    transition: color 0.2s;
+  }
+
+  .clear-button:hover {
+    color: #111827;
   }
 
   .folder-item {

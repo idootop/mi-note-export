@@ -103,8 +103,7 @@
       >
         {#each folderList as folder}
           <option value={folder.id}>
-            📂 {folder.name}
-            ({folder.id === "all"
+            📂&nbsp;&nbsp;{folder.name} ({folder.id === "all"
               ? notes.length
               : notes.filter((n) => n.folderId === folder.id).length})
           </option>
@@ -196,6 +195,7 @@
   }
 
   .folder-select {
+    width: 100%;
     flex: 1;
     padding: 10px 12px;
     font-size: 14px;
@@ -235,6 +235,7 @@
     border-radius: 8px;
     padding: 8px 12px;
     transition: all 0.2s;
+    gap: 8px;
   }
 
   .search-box:focus-within {
@@ -244,13 +245,13 @@
   }
 
   .search-icon {
-    font-size: 16px;
-    margin-right: 8px;
+    font-size: 15px;
     opacity: 0.5;
   }
 
   .search-input {
     flex: 1;
+    width: 100%;
     border: none;
     background: transparent;
     outline: none;
@@ -263,7 +264,6 @@
   }
 
   .clear-button {
-    padding: 4px;
     border: none;
     background: transparent;
     color: #9ca3af;
@@ -324,7 +324,7 @@
   }
 
   .note-item.active {
-    background: #eff6ff;
+    background: #f9fafb;
   }
 
   @media (max-width: 768px) {
@@ -374,7 +374,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
     line-height: 1.4;
   }

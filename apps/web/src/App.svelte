@@ -121,9 +121,12 @@
     flex-direction: column;
     height: 100vh;
     width: 100%;
+    max-width: calc(260px * 3);
     overflow: hidden;
     background: #f9fafb;
     position: relative;
+    margin: 0 auto;
+    border: 1px solid #e5e7eb;
   }
 
   .app-header {
@@ -202,10 +205,9 @@
   }
 
   .sidebar {
-    width: 320px;
+    width: 260px;
     flex-shrink: 0;
     background: #fff;
-    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
     z-index: 10;
     transition: transform 0s ease;
   }

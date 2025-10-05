@@ -73,7 +73,7 @@
 
   .note-header {
     flex-shrink: 0;
-    padding: 32px 40px 24px;
+    padding: 34px 40px;
     border-bottom: 1px solid #e5e7eb;
   }
 

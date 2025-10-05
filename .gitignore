@@ -25,4 +25,5 @@ public/*
 !public/data
 public/data/*
 !public/data/.gitkeep
+apps/web/public/*
 !apps/web/public/logo.png

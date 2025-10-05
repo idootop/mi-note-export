@@ -4,16 +4,13 @@
   export let notes: NoteDetail[] = [];
   export let folders: Record<string, string> = {};
   export let selectedNoteId: string = "";
-  export let selectedFolder: string = "all";
+  export let selectedFolder: string = "0";
 
   // 获取所有文件夹列表
   $: folderList = Object.entries(folders).map(([id, name]) => ({ id, name }));
 
   // 根据选中的文件夹过滤笔记
-  $: filteredNotes =
-    selectedFolder === "all"
-      ? notes
-      : notes.filter((note) => note.folderId === selectedFolder);
+  $: filteredNotes = notes.filter((note) => note.folderId === selectedFolder);
 
   // 按修改时间降序排序
   $: sortedNotes = [...filteredNotes].sort(
@@ -27,11 +24,9 @@
   function selectFolder(folderId: string) {
     selectedFolder = folderId;
     // 如果当前选中的笔记不在新文件夹中，清空选择
-    if (folderId !== "all" && selectedNoteId) {
-      const note = notes.find((n) => n.id === selectedNoteId);
-      if (note && note.folderId !== folderId) {
-        selectedNoteId = "";
-      }
+    const note = notes.find((n) => n.id === selectedNoteId);
+    if (note && note.folderId !== folderId) {
+      selectedNoteId = "";
     }
   }
 
@@ -80,15 +75,6 @@
       </div>
     </h3>
     <div class="folder-list">
-      <button
-        class="folder-item"
-        class:active={selectedFolder === "all"}
-        on:click={() => selectFolder("all")}
-      >
-        <span class="folder-icon">📁</span>
-        <span>全部笔记</span>
-        <span class="count">{notes.length}</span>
-      </button>
       {#each folderList as folder}
         <button
           class="folder-item"

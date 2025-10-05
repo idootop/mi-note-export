@@ -47,6 +47,7 @@ export function parseNoteRawData(
 	const note = _note as NoteDetail;
 	const extraInfo = jsonDecode(note.extraInfo as any) || {};
 	note.id = note.id.toString();
+	note.folderId = note.folderId.toString();
 	note.extraInfo = extraInfo;
 	if (!note.content) {
 		note.content = note.snippet;
@@ -299,10 +300,6 @@ export function note2html(note: NoteDetail) {
 		},
 	);
 
-	// 处理换行
-	html = html.replaceAll("\n", "\n\n");
-	// 把多个换行合并成两个
-	html = html.replace(/\n{3,}/g, "\n\n");
 	// 处理空缩进
 	html = html.replaceAll(' style="margin-left: 0px;"', "");
 	html = html.replaceAll(" margin-left: 0px;", "");

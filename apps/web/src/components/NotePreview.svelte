@@ -98,12 +98,6 @@
     align-items: center;
   }
 
-  .meta-item.folder {
-    background: #f3f4f6;
-    padding: 4px 10px;
-    border-radius: 12px;
-  }
-
   .meta-divider {
     color: #d1d5db;
   }
@@ -114,6 +108,11 @@
     padding: 32px 40px;
     line-height: 1.8;
     color: #374151;
+    white-space: pre-wrap;
+  }
+
+  .note-content:has(:global(div)) {
+    line-height: 1;
   }
 
   /* 笔记内容样式 */

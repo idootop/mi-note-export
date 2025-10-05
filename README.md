@@ -75,6 +75,12 @@ pnpm install && pnpm start
 对于 Windows 操作系统用户，推荐下载 [Git for Windows](https://git-scm.com/downloads)，然后使用 Git Bash 终端运行教程中的命令。
 使用 CMD 命令提示符或 PowerShell 运行可能会有兼容性问题，导致异常发生。
 
+### Docker 启动 `idootop/mi-note-web` 后没有反应
+
+`idootop/mi-note-web` 镜像比较特殊，启动后没有任何输出提示，但实际上是可以正常访问的。
+
+访问 http://localhost:3000 网页后，控制台则会出现日志输出。
+
 ## 注意事项
 
 > [!IMPORTANT]

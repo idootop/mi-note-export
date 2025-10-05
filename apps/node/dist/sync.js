@@ -633,6 +633,7 @@ function parseNoteRawData(_note, _folders) {
 	const note = _note;
 	const extraInfo = jsonDecode(note.extraInfo) || {};
 	note.id = note.id.toString();
+	note.folderId = note.folderId.toString();
 	note.extraInfo = extraInfo;
 	if (!note.content) note.content = note.snippet;
 	if (extraInfo.mind_content) note.content = extraInfo.mind_content;

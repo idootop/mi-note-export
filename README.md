@@ -89,6 +89,14 @@ pnpm install && pnpm start
 
 `idootop/mi-note-web` 镜像比较特殊，启动后没有任何输出提示，但实际上是可以正常访问的。访问 http://localhost:3000 网页后，控制台则会出现日志输出。
 
+## 其他信息
+
+- 本项目图标由「[豆包](https://www.doubao.com)」生成，宣传图使用 [Figma](https://www.figma.com) 制作
+- 本项目代码由 [Cursor](https://cursor.com/cn) + [Claude Sonnet 4.5](https://www.anthropic.com/news/claude-sonnet-4-5) 辅助生成
+- 前端由 [Vite](https://vite.dev/) + [Svelte](https://svelte.dev/) 强力驱动（轻量高效，适合小型单页应用）
+- 后端由 [Bun](https://bun.com/) 强力驱动（更小、更高效的 [Node.js](https://nodejs.org) 运行时替代品）
+- 网站 Docker 镜像由 [lipanski/docker-static-website](https://lipanski.com/posts/smallest-docker-image-static-website) 强力驱动（不到 **100KB**！
+
 ## License
 
 MIT License © 2022-PRESENT [Del Wang](https://del.wang)

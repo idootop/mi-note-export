@@ -67,6 +67,17 @@
     if (plainText.length <= maxLength) return plainText;
     return plainText.slice(0, maxLength) + "...";
   }
+
+  // 高亮匹配的文字
+  function highlightText(text: string, query: string): string {
+    if (!query.trim() || !text) return text;
+
+    const regex = new RegExp(
+      `(${query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`,
+      "gi"
+    );
+    return text.replace(regex, "<mark>$1</mark>");
+  }
 </script>
 
 <div class="note-list-container">
@@ -146,12 +157,18 @@
           >
             <div class="note-header">
               <h4 class="note-title">
-                {note.extraInfo?.title || note.subject || "未命名"}
+                {@html highlightText(
+                  note.extraInfo?.title || note.subject || "未命名",
+                  searchQuery
+                )}
               </h4>
               <span class="note-date">{formatDate(note.modifyDate)}</span>
             </div>
             <p class="note-snippet">
-              {truncateText(note.snippet || note.content)}
+              {@html highlightText(
+                truncateText(note.snippet || note.content),
+                searchQuery
+              )}
             </p>
           </button>
         {/each}
@@ -370,6 +387,18 @@
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     line-height: 1.4;
+  }
+
+  /* 高亮样式 */
+  :global(mark) {
+    background-color: #fef08a;
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-weight: 500;
+  }
+
+  .note-item.active :global(mark) {
+    background-color: #fde047;
   }
 
   /* 滚动条样式 */

@@ -239,6 +239,7 @@
 
   .note-content :global(audio),
   .note-content :global(video) {
+    width: 100%;
     max-width: 100%;
     margin: 16px 0;
     border-radius: 8px;

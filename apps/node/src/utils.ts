@@ -275,13 +275,13 @@ export function note2html(note: NoteDetail) {
 		// 处理音频
 		html = html.replace(
 			new RegExp(`<sound fileid="${file.rawId}"[^>]*>`, "g"),
-			`<audio src="${filePath}" />`,
+			`<audio controls="" playsinline="" src="${filePath}"></audio>`,
 		);
 
 		// 处理视频
 		html = html.replace(
 			new RegExp(`<video fileid="${file.rawId}"[^>]*>`, "g"),
-			`<video src="${filePath}" />`,
+			`<video controls="" src="${filePath}"></video>`,
 		);
 
 		// 处理文件 ID

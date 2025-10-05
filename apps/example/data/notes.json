@@ -1,0 +1,89 @@
+{
+	"folders": {
+		"47766831042806368": "诗歌",
+    "47766831042806369": "测试"
+	},
+	"notes": [
+		{
+			"snippet": "<new-format/><text indent=\"1\"><i>作者：普希金〔近现代〕</i></text>\n<img fileid=\"944107325.qSWi7ufgDsZJCLLiNvvXIg\" imgshow=\"0\" imgdes=\"\" />\n<text indent=\"1\"></text>\n<text indent=\"1\"><b>假如生活欺骗了你，</b> </text>\n<bullet indent=\"1\" />不要悲伤，不要心急！ \n<bullet indent=\"1\" />忧郁的日子里须要镇静： \n<quote><text indent=\"1\">相信吧，快乐的日子将会来临！ </text></quote>\n<input type=\"checkbox\" indent=\"1\" level=\"3\" checked=\"true\" />心儿永远向往着未来； \n<input type=\"checkbox\" indent=\"1\" level=\"3\" />现在却常是忧郁。 \n<text indent=\"1\">一切都是瞬息，<u>一切都将会过去</u>； </text>\n<text indent=\"1\"><",
+			"modifyDate": 1759388234770,
+			"colorId": 0,
+			"subject": "假如生活欺骗了你",
+			"alertDate": 0,
+			"type": "note",
+			"folderId": "47766831042806368",
+			"content": "<new-format/><text indent=\"1\"><i>作者：普希金〔近现代〕</i></text>\n<img fileid=\"944107325.qSWi7ufgDsZJCLLiNvvXIg\" imgshow=\"0\" imgdes=\"\" />\n<text indent=\"1\"></text>\n<text indent=\"1\"><b>假如生活欺骗了你，</b> </text>\n<bullet indent=\"1\" />不要悲伤，不要心急！ \n<bullet indent=\"1\" />忧郁的日子里须要镇静： \n<quote><text indent=\"1\">相信吧，快乐的日子将会来临！ </text></quote>\n<input type=\"checkbox\" indent=\"1\" level=\"3\" checked=\"true\" />心儿永远向往着未来； \n<input type=\"checkbox\" indent=\"1\" level=\"3\" />现在却常是忧郁。 \n<text indent=\"1\">一切都是瞬息，<u>一切都将会过去</u>； </text>\n<text indent=\"1\"><delete>而那过去了的</delete>，就会成为<background color=\"#9affe8af\">亲切的怀恋</background>。</text>\n<text indent=\"1\"></text>\n<text indent=\"1\"></text>",
+			"setting": {
+				"data": [
+					{
+						"digest": "471cf634f9a39512bc9eb15a8dda277af4d2d294",
+						"mimeType": "image/png",
+						"fileId": "944107325.HFu8_b1Ac8i3y1rjP809Qw"
+					},
+					{
+						"digest": "a411e1c9104f22e36ed014aa1580c1b0c852a0d1",
+						"mimeType": "image/webp",
+						"fileId": "944107325.qSWi7ufgDsZJCLLiNvvXIg"
+					}
+				]
+			},
+			"id": "47766832744645696",
+			"tag": "47788842102440000",
+			"createDate": 1759220316809,
+			"status": "normal",
+			"extraInfo": { "title": "假如生活欺骗了你" },
+			"files": [
+				{
+					"name": "image_2025-09-30_HFu8_b1Ac8i3y1rjP809Qw.png",
+					"id": "HFu8_b1Ac8i3y1rjP809Qw",
+					"type": "image",
+					"suffix": "png",
+					"rawId": "944107325.HFu8_b1Ac8i3y1rjP809Qw"
+				},
+				{
+					"name": "image_2025-09-30_qSWi7ufgDsZJCLLiNvvXIg.webp",
+					"id": "qSWi7ufgDsZJCLLiNvvXIg",
+					"type": "image",
+					"suffix": "webp",
+					"rawId": "944107325.qSWi7ufgDsZJCLLiNvvXIg"
+				}
+			]
+		},
+    {
+			"snippet": "测试视频文件备份/播放",
+			"createDate": 1759220316809,
+      "modifyDate": 1759388234770,
+			"subject": "视频测试",
+			"folderId": "47766831042806369",
+			"content": "测试视频文件备份/播放\n<video controls=\"\" src=\"https://www.w3school.com.cn/example/html5/mov_bbb.mp4\"></video>",
+			"id": "47766832744645691",
+			"files": [
+				{
+					"name": "image_2025-09-30_qSWi7ufgDsZJCLLiNvvXIg.webp",
+					"id": "qSWi7ufgDsZJCLLiNvvXIg",
+					"type": "video",
+					"suffix": "mp4",
+					"rawId": "944107325.qSWi7ufgDsZJCLLiNvvXIg"
+				}
+			]
+		},
+    {
+			"snippet": "测试音频文件备份/播放",
+			"createDate": 1759220316809,
+      "modifyDate": 1759388234770,
+			"subject": "音频测试",
+			"folderId": "47766831042806369",
+			"content": "测试音频文件备份/播放\n<audio controls=\"\" src=\"https://www.w3school.com.cn/example/html5/mov_bbb.mp4\"></audio>",
+			"id": "47766832744645692",
+			"files": [
+				{
+					"name": "image_2025-09-30_qSWi7ufgDsZJCLLiNvvXIg.webp",
+					"id": "qSWi7ufgDsZJCLLiNvvXIg",
+					"type": "video",
+					"suffix": "mp4",
+					"rawId": "944107325.qSWi7ufgDsZJCLLiNvvXIg"
+				}
+			]
+		}
+	]
+}

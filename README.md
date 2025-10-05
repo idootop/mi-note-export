@@ -1,15 +1,16 @@
 # 🐰 小米笔记备份助手
 
-一键批量备份小米笔记（包含图片、录音等文件），支持导出为 Markdown 格式，并按文件夹分类整理。
+一键批量备份小米笔记（包含图片、录音等文件），小米笔记秒变个人博客网站。
+
+👉 查看演示网站：https://mi-note-export.vercel.app
 
 ![](screenshots/banner.png)
 
-## 项目亮点
+## 功能列表
 
 1. 一键批量备份小米笔记 + 文件（图片/视频/录音）
-2. 自动保存笔记为 Markdown 格式，方便导入其他应用
-3. 内置网页管理界面，可在线浏览笔记，完美还原笔记排版
-4. 支持增量更新备份，自动检测并处理笔记和文件夹的重命名和删除
+2. 内置网页版，完美还原笔记排版，小米笔记秒变个人博客网站
+3. 支持按需增量备份笔记，自动保存为 Markdown 格式，方便导入其他应用
 
 ## 快速开始
 
@@ -39,10 +40,10 @@ docker run -it --rm --init -p 3000:3000 -v $(pwd)/public/data:/home/static/data 
 ```
 
 > [!IMPORTANT]
-> 网页端暂不支持密码访问，公网部署需谨慎，防止泄露隐私信息！🚨
+> 网页端默认可以访问全部笔记，公网部署需谨慎，防止泄露隐私信息！🚨
 
 > [!TIP]
-> 如果你有 [Node.js](https://nodejs.org/zh-cn/download) 运行环境，也可运行以下命令启动，无需下载 Docker 镜像。
+> 如果本地有 [Node.js](https://nodejs.org/zh-cn/download) 运行环境，可以运行以下命令启动，无需下载 Docker 镜像。
 
 ```bash
 # 安装依赖并运行
@@ -69,9 +70,9 @@ pnpm install && pnpm start
 
 ### Markdown 格式的笔记保存在哪里？
 
-笔记数据下载完成后，会将 Markdown 格式的笔记文件保存到 `public/data/markdown` 目录下。
+笔记数据同步到本地后，会将 Markdown 格式的笔记文件保存到 `public/data/markdown` 目录下，笔记中的图片、录音等文件，则保存在 `public/data/assets` 目录下。
 
-笔记中的图片、录音等文件，则保存在 `public/data/assets` 目录。
+转换成 Markdown 格式后的笔记，可能和原始小米笔记的排版有些许出入。为了尽可能还原笔记的排版，推荐使用网页版查看笔记内容。
 
 ### 401 Unauthorized Error: 获取笔记列表失败
 
@@ -86,9 +87,7 @@ pnpm install && pnpm start
 
 ### Docker 启动 `idootop/mi-note-web` 后没有反应
 
-`idootop/mi-note-web` 镜像比较特殊，启动后没有任何输出提示，但实际上是可以正常访问的。
-
-访问 http://localhost:3000 网页后，控制台则会出现日志输出。
+`idootop/mi-note-web` 镜像比较特殊，启动后没有任何输出提示，但实际上是可以正常访问的。访问 http://localhost:3000 网页后，控制台则会出现日志输出。
 
 ## License
 

@@ -28,3 +28,6 @@ public/data/*
 apps/web/public/*
 apps/web/dist/data
 !apps/web/public/logo.png
+
+# Deploy
+.vercel

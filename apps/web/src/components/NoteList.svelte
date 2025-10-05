@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { NoteDetail } from "@core/node/typing";
+  import { createEventDispatcher } from "svelte";
 
   export let notes: NoteDetail[] = [];
   export let folders: Record<string, string> = {};
@@ -7,6 +8,7 @@
   export let selectedFolder: string = "all";
 
   let searchQuery: string = "";
+  const dispatch = createEventDispatcher();
 
   // 获取所有文件夹列表
   $: folderList = [
@@ -46,6 +48,8 @@
 
   function selectNote(noteId: string) {
     selectedNoteId = noteId;
+    // 触发笔记选择事件，即使 ID 没有变化也会触发
+    dispatch("noteSelected", { noteId });
   }
 
   function selectFolder(folderId: string) {
@@ -91,29 +95,6 @@
 <div class="note-list-container">
   <!-- 文件夹选择 -->
   <div class="folder-section">
-    <h3>
-      <div style="display: flex; align-items: center; gap: 8px;">
-        <a href="https://github.com/idootop/mi-note-export" target="_blank">
-          <img src="/favicon.ico" style="width: 36px; height: 36px;" />
-        </a>
-        <div style="display: flex; flex-direction: column;">
-          <a
-            href="https://github.com/idootop/mi-note-export"
-            target="_blank"
-            style="text-decoration: none; color: inherit;"
-          >
-            小米笔记备份助手
-            <span style="font-size: 12px; color: #9ca3af;">v1.0.0</span>
-          </a>
-          <span style="font-size: 12px; color: #9ca3af;">
-            Made with ❤️ by
-            <a href="https://del.wang" target="_blank" style="color: #2563eb;">
-              del.wang
-            </a>
-          </span>
-        </div>
-      </div>
-    </h3>
     <div class="folder-select-wrapper">
       <select
         class="folder-select"
@@ -195,15 +176,6 @@
     border-right: 1px solid #e5e7eb;
   }
 
-  h3 {
-    font-size: 14px;
-    font-weight: 600;
-    color: #374151;
-    margin: 0;
-    padding: 16px 20px 12px;
-    border-bottom: 1px solid #f3f4f6;
-  }
-
   .folder-section {
     flex-shrink: 0;
     border-bottom: 1px solid #e5e7eb;
@@ -211,10 +183,16 @@
 
   .folder-select-wrapper {
     position: relative;
-    padding: 12px;
+    padding: 16px 12px;
     display: flex;
     align-items: center;
     gap: 8px;
+  }
+
+  @media (max-width: 768px) {
+    .folder-select-wrapper {
+      padding: 12px;
+    }
   }
 
   .folder-select {
@@ -240,6 +218,12 @@
     padding: 12px;
     border-bottom: 1px solid #e5e7eb;
     background: #fff;
+  }
+
+  @media (max-width: 768px) {
+    .search-section {
+      padding: 8px 12px;
+    }
   }
 
   .search-box {
@@ -304,6 +288,13 @@
     flex: 1;
     overflow-y: auto;
     padding: 8px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  @media (max-width: 768px) {
+    .notes-list {
+      padding: 4px 8px;
+    }
   }
 
   .empty-state {
@@ -325,6 +316,7 @@
     transition: all 0.2s;
     text-align: left;
     margin-bottom: 4px;
+    -webkit-tap-highlight-color: transparent;
   }
 
   .note-item:hover {
@@ -333,6 +325,21 @@
 
   .note-item.active {
     background: #eff6ff;
+  }
+
+  @media (max-width: 768px) {
+    .note-item {
+      padding: 12px 10px;
+      border-radius: 6px;
+    }
+
+    .note-item:active {
+      background: #f3f4f6;
+    }
+
+    .note-item.active:active {
+      background: #dbeafe;
+    }
   }
 
   .note-header {

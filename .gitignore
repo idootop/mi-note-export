@@ -25,4 +25,4 @@ public/*
 !public/data
 public/data/*
 !public/data/.gitkeep
-!apps/web/public/favicon.ico
+!apps/web/public/logo.png

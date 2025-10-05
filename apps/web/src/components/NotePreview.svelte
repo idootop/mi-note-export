@@ -30,9 +30,9 @@
         {note.extraInfo?.title || note.subject || "未命名"}
       </h1>
       <div class="note-meta">
-        <span class="meta-item">创建时间: {formatDate(note.createDate)}</span>
+        <span class="meta-item">修改于: {formatDate(note.modifyDate)}</span>
         <span class="meta-divider">·</span>
-        <span class="meta-item">修改时间: {formatDate(note.modifyDate)}</span>
+        <span class="meta-item">创建于: {formatDate(note.createDate)}</span>
       </div>
     </div>
 
@@ -93,6 +93,22 @@
     color: #6b7280;
   }
 
+  @media (max-width: 768px) {
+    .note-header {
+      padding: 20px 16px 16px;
+    }
+
+    .note-title {
+      font-size: 22px;
+      margin: 0 0 12px 0;
+    }
+
+    .note-meta {
+      font-size: 12px;
+      flex-wrap: wrap;
+    }
+  }
+
   .meta-item {
     display: inline-flex;
     align-items: center;
@@ -109,10 +125,19 @@
     line-height: 1.8;
     color: #374151;
     white-space: pre-wrap;
+    word-break: break-word;
+    -webkit-overflow-scrolling: touch;
   }
 
   .note-content:has(:global(div)) {
-    line-height: 1;
+    white-space: inherit;
+  }
+
+  @media (max-width: 768px) {
+    .note-content {
+      padding: 20px 16px;
+      font-size: 15px;
+    }
   }
 
   /* 笔记内容样式 */
@@ -138,6 +163,23 @@
     color: #111827;
     margin: 16px 0 12px 0;
     line-height: 1.4;
+  }
+
+  @media (max-width: 768px) {
+    .note-content :global(h1) {
+      font-size: 20px;
+      margin: 20px 0 12px 0;
+    }
+
+    .note-content :global(h2) {
+      font-size: 18px;
+      margin: 16px 0 10px 0;
+    }
+
+    .note-content :global(h3) {
+      font-size: 16px;
+      margin: 14px 0 10px 0;
+    }
   }
 
   .note-content :global(p) {
@@ -200,6 +242,19 @@
     max-width: 100%;
     margin: 16px 0;
     border-radius: 8px;
+  }
+
+  @media (max-width: 768px) {
+    .note-content :global(img) {
+      margin: 12px 0;
+      border-radius: 6px;
+    }
+
+    .note-content :global(audio),
+    .note-content :global(video) {
+      margin: 12px 0;
+      border-radius: 6px;
+    }
   }
 
   .note-content :global(a) {

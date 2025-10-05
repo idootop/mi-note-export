@@ -4,15 +4,21 @@
   export let notes: NoteDetail[] = [];
   export let folders: Record<string, string> = {};
   export let selectedNoteId: string = "";
-  export let selectedFolder: string = "0";
+  export let selectedFolder: string = "all";
 
   let searchQuery: string = "";
 
   // 获取所有文件夹列表
-  $: folderList = Object.entries(folders).map(([id, name]) => ({ id, name }));
+  $: folderList = [
+    { id: "all", name: "全部笔记" },
+    ...Object.entries(folders).map(([id, name]) => ({ id, name })),
+  ];
 
   // 根据选中的文件夹过滤笔记
-  $: filteredNotes = notes.filter((note) => note.folderId === selectedFolder);
+  $: filteredNotes =
+    selectedFolder === "all"
+      ? notes
+      : notes.filter((note) => note.folderId === selectedFolder);
 
   // 根据搜索关键词过滤笔记
   $: searchedNotes = searchQuery.trim()
@@ -45,9 +51,11 @@
   function selectFolder(folderId: string) {
     selectedFolder = folderId;
     // 如果当前选中的笔记不在新文件夹中，清空选择
-    const note = notes.find((n) => n.id === selectedNoteId);
-    if (note && note.folderId !== folderId) {
-      selectedNoteId = "";
+    if (folderId !== "all") {
+      const note = notes.find((n) => n.id === selectedNoteId);
+      if (note && note.folderId !== folderId) {
+        selectedNoteId = "";
+      }
     }
   }
 
@@ -106,20 +114,21 @@
         </div>
       </div>
     </h3>
-    <div class="folder-list">
-      {#each folderList as folder}
-        <button
-          class="folder-item"
-          class:active={selectedFolder === folder.id}
-          on:click={() => selectFolder(folder.id)}
-        >
-          <span class="folder-icon">📂</span>
-          <span>{folder.name}</span>
-          <span class="count"
-            >{notes.filter((n) => n.folderId === folder.id).length}</span
-          >
-        </button>
-      {/each}
+    <div class="folder-select-wrapper">
+      <select
+        class="folder-select"
+        bind:value={selectedFolder}
+        on:change={() => selectFolder(selectedFolder)}
+      >
+        {#each folderList as folder}
+          <option value={folder.id}>
+            📂 {folder.name}
+            ({folder.id === "all"
+              ? notes.length
+              : notes.filter((n) => n.folderId === folder.id).length})
+          </option>
+        {/each}
+      </select>
     </div>
   </div>
 
@@ -200,8 +209,30 @@
     border-bottom: 1px solid #e5e7eb;
   }
 
-  .folder-list {
-    padding: 8px;
+  .folder-select-wrapper {
+    position: relative;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .folder-select {
+    flex: 1;
+    padding: 10px 12px;
+    font-size: 14px;
+    color: #111827;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.2s;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 36px;
   }
 
   .search-section {
@@ -260,54 +291,6 @@
 
   .clear-button:hover {
     color: #111827;
-  }
-
-  .folder-item {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 12px;
-    border: none;
-    background: transparent;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s;
-    font-size: 14px;
-    color: #6b7280;
-    text-align: left;
-  }
-
-  .folder-item:hover {
-    background: #f9fafb;
-    color: #111827;
-  }
-
-  .folder-item.active {
-    background: #eff6ff;
-    color: #2563eb;
-    font-weight: 500;
-  }
-
-  .folder-icon {
-    font-size: 16px;
-  }
-
-  .folder-item span:nth-child(2) {
-    flex: 1;
-  }
-
-  .count {
-    font-size: 12px;
-    color: #9ca3af;
-    background: #f3f4f6;
-    padding: 2px 8px;
-    border-radius: 12px;
-  }
-
-  .folder-item.active .count {
-    background: #dbeafe;
-    color: #2563eb;
   }
 
   .notes-section {

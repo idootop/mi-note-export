@@ -32,7 +32,7 @@ MI_COOKIE='xxxxxx'
 
 ### 2. 备份笔记
 
-下载小米笔记 + 文件（图片/录音等）到本地
+下载小米笔记和图片/录音等附件到本地
 
 ```bash
 docker run -it --rm --env-file $(pwd)/env -v $(pwd)/public/data:/app/public/data idootop/mi-note-sync:latest
@@ -51,9 +51,9 @@ docker run -it --rm --init -p 3000:3000 -v $(pwd)/public/data:/home/static/data 
 
 ### 4. 部署上线
 
-> 👉 查看演示网站：https://mi-note-export.vercel.app
-
 复制 `apps/web/dist` 下的静态文件到 `public`，然后将 `public` 文件夹打包上传到任意静态站点即可。
+
+> 👉 查看演示网站：https://mi-note-export.vercel.app
 
 ```bash
 public
@@ -72,9 +72,7 @@ public
 
 ## 项目背景
 
-犹记得我用过的最后一部小米手机是 [红米 Note 4X](https://www.mi.com/redminote4x) —— 当年的千元机性价比之王，陪我走过了大学的青春岁月，记录了许多美好回忆。
-
-不过毕业之后，我就再没用过小米手机。
+犹记得我用过的最后一部小米手机是 [红米 Note 4X](https://www.mi.com/redminote4x) —— 当年的千元机性价比之王，陪我走过了大学的青春岁月，记录了许多美好回忆。不过毕业之后，我就再没用过小米手机。
 
 直到有一天，我收到了「小米云服务存储数据即将清空」的通知邮件。
 

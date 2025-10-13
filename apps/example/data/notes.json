@@ -1,89 +1,88 @@
 {
 	"folders": {
-		"47766831042806368": "诗歌",
-    "47766831042806369": "测试"
+		"1000": "测试",
+		"1001": "使用教程"
 	},
 	"notes": [
 		{
-			"snippet": "<new-format/><text indent=\"1\"><i>作者：普希金〔近现代〕</i></text>\n<img fileid=\"944107325.qSWi7ufgDsZJCLLiNvvXIg\" imgshow=\"0\" imgdes=\"\" />\n<text indent=\"1\"></text>\n<text indent=\"1\"><b>假如生活欺骗了你，</b> </text>\n<bullet indent=\"1\" />不要悲伤，不要心急！ \n<bullet indent=\"1\" />忧郁的日子里须要镇静： \n<quote><text indent=\"1\">相信吧，快乐的日子将会来临！ </text></quote>\n<input type=\"checkbox\" indent=\"1\" level=\"3\" checked=\"true\" />心儿永远向往着未来； \n<input type=\"checkbox\" indent=\"1\" level=\"3\" />现在却常是忧郁。 \n<text indent=\"1\">一切都是瞬息，<u>一切都将会过去</u>； </text>\n<text indent=\"1\"><",
-			"modifyDate": 1759388234770,
+			"snippet": "犹记得我使用过的最后一部小米手机是 红米 Note 4X —— 当年的千元机性价比之王，陪我走过了大学的青春岁月，记录了许多美好回忆。不过毕业之后，我就再没用过小米手机。\n直到有一天，我在邮箱里收到了「小米云服务存储数据即将清空」的通知邮件。\n\n原以为小米云服务里的数据是永久保存的，原来长时间不用会被清空。\n幸好我有经常看邮件的习惯，不然一个月之后就追悔莫及了。\n遗憾的是，官方并没有提供「批量导出...",
+			"modifyDate": 1760068800000,
+			"colorId": 0,
+			"subject": "项目背景",
+			"alertDate": 0,
+			"type": "note",
+			"folderId": "1001",
+			"content": "<div>犹记得我使用过的最后一部小米手机是 <a href=\"https://www.mi.com/redminote4x\" target=\"_blank\">红米 Note 4X</a> —— 当年的千元机性价比之王，陪我走过了大学的青春岁月，记录了许多美好回忆。不过毕业之后，我就再没用过小米手机。</div>\n<div>直到有一天，我在邮箱里收到了「小米云服务存储数据即将清空」的通知邮件。</div>\n<div><img src=\"/data/assets//email.webp\" alt=\"\"></div>\n<div>原以为小米云服务里的数据是永久保存的，原来长时间不用会被清空。</div>\n<div>幸好我有经常看邮件的习惯，不然一个月之后就追悔莫及了。</div>\n<div>遗憾的是，官方并没有提供「批量导出笔记」的功能。</div>\n<div>没办法，只能自己造轮子了～</div>\n",
+			"id": "1000",
+			"createDate": 1760068800000,
+			"status": "normal",
+			"extraInfo": {
+				"title": "项目背景"
+			}
+		},
+		{
+			"snippet": "Markdown 格式的笔记保存在哪里？\n笔记数据同步到本地后，会将 Markdown 格式的笔记文件保存到 public/data/markdown 目录下，笔记中的图片、录音等文件，则保存在 public/data/assets 目录下。\n转换成 Markdown 格式后的笔记，可能和原始小米笔记的排版有些许出入。为了尽可能还原笔记的排版，推荐使用网页版查看笔记内容。\n401 Unauthor...",
+			"modifyDate": 1760061600000,
+			"colorId": 0,
+			"subject": "常见问题",
+			"alertDate": 0,
+			"type": "note",
+			"folderId": "1001",
+			"content": "<h3>Markdown 格式的笔记保存在哪里？</h3>\n<div>笔记数据同步到本地后，会将 Markdown 格式的笔记文件保存到 <code>public/data/markdown</code> 目录下，笔记中的图片、录音等文件，则保存在 <code>public/data/assets</code> 目录下。</div>\n<div>转换成 Markdown 格式后的笔记，可能和原始小米笔记的排版有些许出入。为了尽可能还原笔记的排版，推荐使用网页版查看笔记内容。</div>\n<h3>401 Unauthorized Error: 获取笔记列表失败</h3>\n<div>你还没有设置 cookie 或者 cookie 已过期。</div>\n<div>请刷新网页，按教程重新获取 cookie 后，更新到 <a href=\"https://github.com/idootop/mi-note-export/blob/main/env\" target=\"_blank\">env</a> 文件中重新运行。</div>\n<h3>找不到命令 / Command not found</h3>\n<div>对于 Windows 操作系统用户，推荐下载 <a href=\"https://git-scm.com/downloads\" target=\"_blank\">Git for Windows</a>，然后使用 Git Bash 终端运行教程中的命令。\n使用 CMD 命令提示符或 PowerShell 运行可能会有兼容性问题，导致异常发生。</div>\n<h3>Docker 启动 <code>idootop/mi-note-web</code> 后没有反应</h3>\n<div><code>idootop/mi-note-web</code> 镜像比较特殊，启动后没有任何输出提示，但实际上是可以正常访问的。访问 <a href=\"http://localhost:3000\" target=\"_blank\">http://localhost:3000</a> 网页后，控制台则会出现日志输出。</div>\n",
+			"id": "1001",
+			"createDate": 1760061600000,
+			"status": "normal",
+			"extraInfo": {
+				"title": "常见问题"
+			}
+		},
+		{
+			"snippet": "假如生活欺骗了你，\n\n不要悲伤，不要心急！\n忧郁的日子里须要镇静：\n\n\n相信吧，快乐的日子将会来临！\n\n\n 心儿永远向往着未来；\n 现在却常是忧郁。\n\n一切都是瞬息，一切都将会过去；\n而那过去了的，就会成为亲切的怀恋。\n\n测试图片\n\n\n测试视频\n\n\n测试音频\n\n",
+			"modifyDate": 1759291200000,
 			"colorId": 0,
 			"subject": "假如生活欺骗了你",
 			"alertDate": 0,
 			"type": "note",
-			"folderId": "47766831042806368",
-			"content": "<new-format/><text indent=\"1\"><i>作者：普希金〔近现代〕</i></text>\n<img fileid=\"944107325.qSWi7ufgDsZJCLLiNvvXIg\" imgshow=\"0\" imgdes=\"\" />\n<text indent=\"1\"></text>\n<text indent=\"1\"><b>假如生活欺骗了你，</b> </text>\n<bullet indent=\"1\" />不要悲伤，不要心急！ \n<bullet indent=\"1\" />忧郁的日子里须要镇静： \n<quote><text indent=\"1\">相信吧，快乐的日子将会来临！ </text></quote>\n<input type=\"checkbox\" indent=\"1\" level=\"3\" checked=\"true\" />心儿永远向往着未来； \n<input type=\"checkbox\" indent=\"1\" level=\"3\" />现在却常是忧郁。 \n<text indent=\"1\">一切都是瞬息，<u>一切都将会过去</u>； </text>\n<text indent=\"1\"><delete>而那过去了的</delete>，就会成为<background color=\"#9affe8af\">亲切的怀恋</background>。</text>\n<text indent=\"1\"></text>\n<text indent=\"1\"></text>",
+			"folderId": "1000",
+			"content": "<div><strong>假如生活欺骗了你，</strong></div>\n<ul>\n<li>不要悲伤，不要心急！</li>\n<li>忧郁的日子里须要镇静：</li>\n</ul>\n<blockquote>\n<div>相信吧，快乐的日子将会来临！</div>\n</blockquote>\n<ul>\n<div><input checked=\"\" disabled=\"\" type=\"checkbox\"> 心儿永远向往着未来；</div>\n<div><input disabled=\"\" type=\"checkbox\"> 现在却常是忧郁。</div>\n</ul>\n<div>一切都是瞬息，<u>一切都将会过去</u>；</div>\n<div><del>而那过去了的</del>，就会成为亲切的怀恋。</div>\n<hr>\n<div>测试图片</div>\n<div><img src=\"/data/assets/image_2025-09-30_qSWi7ufgDsZJCLLiNvvXIg.webp\" alt=\"\"></div>\n<hr>\n<div>测试视频</div>\n<div><video controls=\"\" src=\"https://www.w3school.com.cn/example/html5/mov_bbb.mp4\"></video></div>\n<hr>\n<div>测试音频</div>\n<div><audio controls=\"\" src=\"https://www.w3school.com.cn/example/html5/mov_bbb.mp4\"></audio></div>\n",
+			"id": "1002",
+			"createDate": 1759291200000,
+			"status": "normal",
+			"extraInfo": {
+				"title": "假如生活欺骗了你"
+			},
+			"files": [
+				{
+					"name": "image_2025-09-30_qSWi7ufgDsZJCLLiNvvXIg.webp",
+					"id": "2025-09-30_qSWi7ufgDsZJCLLiNvvXIg",
+					"type": "image",
+					"suffix": "webp",
+					"rawId": "944107325.2025-09-30_qSWi7ufgDsZJCLLiNvvXIg"
+				},
+				{
+					"name": "mov_bbb.mp4",
+					"id": "video_1760323728389",
+					"type": "video",
+					"suffix": "mp4",
+					"rawId": "video.1760323728389"
+				},
+				{
+					"name": "mov_bbb.mp4",
+					"id": "audio_1760323728389",
+					"type": "audio",
+					"suffix": "mp4",
+					"rawId": "audio.1760323728389"
+				}
+			],
 			"setting": {
 				"data": [
 					{
-						"digest": "471cf634f9a39512bc9eb15a8dda277af4d2d294",
-						"mimeType": "image/png",
-						"fileId": "944107325.HFu8_b1Ac8i3y1rjP809Qw"
-					},
-					{
-						"digest": "a411e1c9104f22e36ed014aa1580c1b0c852a0d1",
+						"digest": "generated_digest_2025-09-30_qSWi7ufgDsZJCLLiNvvXIg",
 						"mimeType": "image/webp",
-						"fileId": "944107325.qSWi7ufgDsZJCLLiNvvXIg"
+						"fileId": "944107325.2025-09-30_qSWi7ufgDsZJCLLiNvvXIg"
 					}
 				]
-			},
-			"id": "47766832744645696",
-			"tag": "47788842102440000",
-			"createDate": 1759220316809,
-			"status": "normal",
-			"extraInfo": { "title": "假如生活欺骗了你" },
-			"files": [
-				{
-					"name": "image_2025-09-30_HFu8_b1Ac8i3y1rjP809Qw.png",
-					"id": "HFu8_b1Ac8i3y1rjP809Qw",
-					"type": "image",
-					"suffix": "png",
-					"rawId": "944107325.HFu8_b1Ac8i3y1rjP809Qw"
-				},
-				{
-					"name": "image_2025-09-30_qSWi7ufgDsZJCLLiNvvXIg.webp",
-					"id": "qSWi7ufgDsZJCLLiNvvXIg",
-					"type": "image",
-					"suffix": "webp",
-					"rawId": "944107325.qSWi7ufgDsZJCLLiNvvXIg"
-				}
-			]
-		},
-    {
-			"snippet": "测试视频文件备份/播放",
-			"createDate": 1759220316809,
-      "modifyDate": 1759388234770,
-			"subject": "视频测试",
-			"folderId": "47766831042806369",
-			"content": "测试视频文件备份/播放\n<video controls=\"\" src=\"https://www.w3school.com.cn/example/html5/mov_bbb.mp4\"></video>",
-			"id": "47766832744645691",
-			"files": [
-				{
-					"name": "image_2025-09-30_qSWi7ufgDsZJCLLiNvvXIg.webp",
-					"id": "qSWi7ufgDsZJCLLiNvvXIg",
-					"type": "video",
-					"suffix": "mp4",
-					"rawId": "944107325.qSWi7ufgDsZJCLLiNvvXIg"
-				}
-			]
-		},
-    {
-			"snippet": "测试音频文件备份/播放",
-			"createDate": 1759220316809,
-      "modifyDate": 1759388234770,
-			"subject": "音频测试",
-			"folderId": "47766831042806369",
-			"content": "测试音频文件备份/播放\n<audio controls=\"\" src=\"https://www.w3school.com.cn/example/html5/mov_bbb.mp4\"></audio>",
-			"id": "47766832744645692",
-			"files": [
-				{
-					"name": "image_2025-09-30_qSWi7ufgDsZJCLLiNvvXIg.webp",
-					"id": "qSWi7ufgDsZJCLLiNvvXIg",
-					"type": "video",
-					"suffix": "mp4",
-					"rawId": "944107325.qSWi7ufgDsZJCLLiNvvXIg"
-				}
-			]
+			}
 		}
 	]
 }

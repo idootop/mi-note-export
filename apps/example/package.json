@@ -1,0 +1,17 @@
+{
+	"name": "example",
+	"version": "1.0.0",
+	"type": "module",
+	"scripts": {
+		"build": "node build.js",
+		"start": "pnpm build && serve -s ."
+	},
+	"packageManager": "pnpm@10.14.0",
+	"devDependencies": {
+		"@types/node": "^24.7.2",
+		"gray-matter": "^4.0.3",
+		"marked": "^16.4.0",
+		"serve": "^14.2.5",
+		"typescript": "^5.9.3"
+	}
+}

@@ -2,6 +2,23 @@ import { formatDate, jsonDecode } from "@del-wang/utils";
 import { kMarkdownDir } from "./config";
 import type { NoteDetail, NoteEntry, NoteFile } from "./typing";
 
+/**
+ * 格式化时间戳为日期时间字符串
+ * @description 返回 YYYY-MM-DD_HH-mm-ss 格式，用于文件名
+ * @author xushouwang
+ * @date 2026-01-21
+ */
+function formatDateTime(timestamp: number): string {
+	const date = new Date(timestamp);
+	const year = date.getFullYear();
+	const month = String(date.getMonth() + 1).padStart(2, "0");
+	const day = String(date.getDate()).padStart(2, "0");
+	const hours = String(date.getHours()).padStart(2, "0");
+	const minutes = String(date.getMinutes()).padStart(2, "0");
+	const seconds = String(date.getSeconds()).padStart(2, "0");
+	return `${year}-${month}-${day}_${hours}-${minutes}-${seconds}`;
+}
+
 function parseNoteFiles(note: NoteEntry): NoteFile[] {
 	const files = note.setting?.data ?? [];
 	const result: NoteFile[] = [];
@@ -30,12 +47,15 @@ export function getFolderDir(folderName: string): string {
 
 /**
  * 生成笔记文件路径
+ * @description 文件名格式：YYYY-MM-DD_HH-mm-ss_标题.md，避免同一天多个笔记被覆盖
+ * @author xushouwang
+ * @date 2026-01-21
  */
 export function getNoteFilePath(
 	note: NoteDetail,
 	folders: Record<string, string>,
 ): string {
-	const name = `${formatDate(note.createDate)}_${note.subject}.md`;
+	const name = `${formatDateTime(note.createDate)}_${note.subject}.md`;
 	const folderName = folders[note.folderId];
 	return `${kMarkdownDir}/${folderName}/${name}`;
 }

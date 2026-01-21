@@ -1,7 +1,7 @@
 <div align="center">
 
 <h1 align="center">📝 小米笔记备份助手</h1>
-<p align="center">小米笔记秒变<a href="https://mi-note-export.vercel.app" target="_blank">个人博客网站</a>，一键备份小米笔记</p>
+<p align="center">一键备份小米笔记，秒变<a href="https://mi-note-export.vercel.app" target="_blank">个人博客网站</a></p>
 
 [![Banner](screenshots/banner.png)](https://mi-note-export.vercel.app)
 
@@ -24,7 +24,7 @@ git clone https://github.com/idootop/mi-note-export.git && cd mi-note-export
 
 ### 1. 配置参数
 
-然后，把[ env 配置文件](./env)中的 Cookie 换成你自己的 [👉 设置教程](https://github.com/idootop/mi-note-export/issues/4)
+然后，把 [env 配置文件](./env)中的 Cookie 换成你自己的 [👉 设置教程](https://github.com/idootop/mi-note-export/issues/4)
 
 ```bash
 MI_COOKIE='xxxxxx'

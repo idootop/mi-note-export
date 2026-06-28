@@ -2,6 +2,154 @@ import { formatDate, jsonDecode } from "@del-wang/utils";
 import { kMarkdownDir } from "./config";
 import type { NoteDetail, NoteEntry, NoteFile } from "./typing";
 
+const MIMIND_PREFIX = "<MiMind Prdfix>";
+
+interface MiMindNode {
+	label: string;
+	children?: MiMindNode[];
+}
+
+/**
+ * 检测内容是否为 MiMind 思维导图格式
+ */
+export function isMindMap(content: string): boolean {
+	return content.startsWith(MIMIND_PREFIX);
+}
+
+/**
+ * 将 MiMind 思维导图转换为 Markdown 嵌套列表
+ */
+export function mindMapToMarkdown(content: string): string {
+	const jsonStr = content.substring(MIMIND_PREFIX.length);
+	const mindData = JSON.parse(jsonStr);
+	const innerData = JSON.parse(mindData.content);
+	const root: MiMindNode = innerData.data;
+
+	const lines: string[] = [`# ${root.label}`, ""];
+
+	function traverse(node: MiMindNode, depth: number) {
+		const indent = "  ".repeat(depth);
+		lines.push(`${indent}- ${node.label}`);
+		for (const child of node.children ?? []) {
+			traverse(child, depth + 1);
+		}
+	}
+
+	for (const child of root.children ?? []) {
+		traverse(child, 0);
+	}
+
+	return lines.join("\n");
+}
+
+/**
+ * 将 MiMind 思维导图转换为 HTML 嵌套列表
+ */
+export function mindMapToHtml(content: string): string {
+	const jsonStr = content.substring(MIMIND_PREFIX.length);
+	const mindData = JSON.parse(jsonStr);
+	const innerData = JSON.parse(mindData.content);
+	const root: MiMindNode = innerData.data;
+
+	function buildList(node: MiMindNode): string {
+		if (!node.children || node.children.length === 0) {
+			return "";
+		}
+		const items = node.children
+			.map((child) => {
+				const nested = buildList(child);
+				return `<li>${child.label}${nested}</li>`;
+			})
+			.join("");
+		return `<ul>${items}</ul>`;
+	}
+
+	return `<h1>${root.label}</h1>${buildList(root)}`;
+}
+
+/**
+ * 将 HTML <ul>/<li> 列表转换为 Markdown 嵌套列表
+ */
+export function convertHtmlLists(content: string): string {
+	// 没有 <ul> 标签则直接返回
+	if (!content.includes("<ul>")) {
+		return content;
+	}
+
+	const lines: string[] = [];
+	let indent = -1;
+	let currentText = "";
+	let inListItem = false;
+
+	// 按标签分词
+	const regex = /(<ul>|<\/ul>|<li>|<\/li>)/g;
+	let lastIndex = 0;
+	const tokens: { type: string; text: string }[] = [];
+	let match: RegExpExecArray | null;
+
+	while ((match = regex.exec(content)) !== null) {
+		if (match.index > lastIndex) {
+			tokens.push({
+				type: "text",
+				text: content.substring(lastIndex, match.index),
+			});
+		}
+		tokens.push({ type: match[1], text: match[1] });
+		lastIndex = regex.lastIndex;
+	}
+	if (lastIndex < content.length) {
+		tokens.push({ type: "text", text: content.substring(lastIndex) });
+	}
+
+	for (const token of tokens) {
+		switch (token.type) {
+			case "<ul>":
+				// 如果在列表项内遇到嵌套 <ul>，先输出当前文本作为列表项
+				if (inListItem && currentText.trim()) {
+					const spaces = indent >= 0 ? "  ".repeat(indent) : "";
+					lines.push(`${spaces}- ${currentText.trim()}`);
+				}
+				currentText = "";
+				indent++;
+				break;
+			case "</ul>":
+				indent--;
+				break;
+			case "<li>":
+				inListItem = true;
+				currentText = "";
+				break;
+			case "</li>":
+				if (currentText.trim()) {
+					const spaces = indent >= 0 ? "  ".repeat(indent) : "";
+					lines.push(`${spaces}- ${currentText.trim()}`);
+				}
+				inListItem = false;
+				currentText = "";
+				break;
+			default:
+				if (inListItem) {
+					currentText += token.text;
+				}
+				break;
+		}
+	}
+
+	return lines.join("\n");
+}
+
+/**
+ * 解码常见 HTML 实体
+ */
+export function decodeHtmlEntities(content: string): string {
+	return content
+		.replace(/&amp;/g, "&")
+		.replace(/&lt;/g, "<")
+		.replace(/&gt;/g, ">")
+		.replace(/&quot;/g, '"')
+		.replace(/&#39;/g, "'");
+}
+
 /**
  * 格式化时间戳为日期时间字符串
  * @description 返回 YYYY-MM-DD_HH-mm-ss 格式，用于文件名
@@ -89,6 +237,11 @@ export function parseNoteRawData(
  */
 export function note2markdown(note: NoteDetail) {
 	let markdown = note.content;
+
+	// 0. 如果是 MiMind 思维导图，直接转换为 Markdown 列表
+	if (isMindMap(markdown)) {
+		return mindMapToMarkdown(markdown);
+	}
 
 	// 1. 去掉 <new-format/> 标签
 	markdown = markdown.replace(/<new-format\s*\/>/g, "");
@@ -210,7 +363,13 @@ export function note2markdown(note: NoteDetail) {
 	);
 	markdown = markdown.replaceAll('<input type="checkbox" />', "- [ ] ");
 
-	// 14. 处理换行
+	// 14. 处理 HTML <ul>/<li> 列表
+	markdown = convertHtmlLists(markdown);
+
+	// 15. 解码 HTML 实体
+	markdown = decodeHtmlEntities(markdown);
+
+	// 16. 处理换行
 	markdown = markdown.replaceAll("\n", "\n\n");
 	// 处理表格之间的换行
 	markdown = markdown.replace(/- (.*?)\n\n- /g, "\- $1\n\- ");
@@ -225,6 +384,11 @@ export function note2markdown(note: NoteDetail) {
  */
 export function note2html(note: NoteDetail) {
 	let html = note.content;
+
+	// 如果是 MiMind 思维导图，直接转换为 HTML 列表
+	if (isMindMap(html)) {
+		return mindMapToHtml(html);
+	}
 
 	// 去掉 <new-format/> 标签
 	html = html.replace(/<new-format\s*\/>/g, "");

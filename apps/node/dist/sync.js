@@ -596,6 +596,93 @@ function formatDate(timestamp$1, offset = 0) {
 
 //#endregion
 //#region src/utils.ts
+const MIMIND_PREFIX = "<MiMind Prdfix>";
+/**
+* 检测内容是否为 MiMind 思维导图格式
+*/
+function isMindMap(content) {
+	return content.startsWith(MIMIND_PREFIX);
+}
+/**
+* 将 MiMind 思维导图转换为 Markdown 嵌套列表
+*/
+function mindMapToMarkdown(content) {
+	const jsonStr = content.substring(15);
+	const mindData = JSON.parse(jsonStr);
+	const root = JSON.parse(mindData.content).data;
+	const lines = [`# ${root.label}`, ""];
+	function traverse(node, depth) {
+		const indent = "  ".repeat(depth);
+		lines.push(`${indent}- ${node.label}`);
+		for (const child of node.children ?? []) traverse(child, depth + 1);
+	}
+	for (const child of root.children ?? []) traverse(child, 0);
+	return lines.join("\n");
+}
+/**
+* 将 HTML <ul>/<li> 列表转换为 Markdown 嵌套列表
+*/
+function convertHtmlLists(content) {
+	if (!content.includes("<ul>")) return content;
+	const lines = [];
+	let indent = -1;
+	let currentText = "";
+	let inListItem = false;
+	const regex = /(<ul>|<\/ul>|<li>|<\/li>)/g;
+	let lastIndex = 0;
+	const tokens = [];
+	let match;
+	while ((match = regex.exec(content)) !== null) {
+		if (match.index > lastIndex) tokens.push({
+			type: "text",
+			text: content.substring(lastIndex, match.index)
+		});
+		tokens.push({
+			type: match[1],
+			text: match[1]
+		});
+		lastIndex = regex.lastIndex;
+	}
+	if (lastIndex < content.length) tokens.push({
+		type: "text",
+		text: content.substring(lastIndex)
+	});
+	for (const token of tokens) switch (token.type) {
+		case "<ul>":
+			if (inListItem && currentText.trim()) {
+				const spaces = indent >= 0 ? "  ".repeat(indent) : "";
+				lines.push(`${spaces}- ${currentText.trim()}`);
+			}
+			currentText = "";
+			indent++;
+			break;
+		case "</ul>":
+			indent--;
+			break;
+		case "<li>":
+			inListItem = true;
+			currentText = "";
+			break;
+		case "</li>":
+			if (currentText.trim()) {
+				const spaces = indent >= 0 ? "  ".repeat(indent) : "";
+				lines.push(`${spaces}- ${currentText.trim()}`);
+			}
+			inListItem = false;
+			currentText = "";
+			break;
+		default:
+			if (inListItem) currentText += token.text;
+			break;
+	}
+	return lines.join("\n");
+}
+/**
+* 解码常见 HTML 实体
+*/
+function decodeHtmlEntities(content) {
+	return content.replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, "\"").replace(/&#39;/g, "'");
+}
 /**
 * 格式化时间戳为日期时间字符串
 * @description 返回 YYYY-MM-DD_HH-mm-ss 格式，用于文件名
@@ -666,6 +753,7 @@ function parseNoteRawData(_note, _folders) {
 */
 function note2markdown(note) {
 	let markdown = note.content;
+	if (isMindMap(markdown)) return mindMapToMarkdown(markdown);
 	markdown = markdown.replace(/<new-format\s*\/>/g, "");
 	markdown = markdown.replace(/<hr\s*\/>/g, "---");
 	markdown = markdown.replace(/<quote>(.*?)<\/quote>/gs, "> $1");
@@ -710,6 +798,8 @@ function note2markdown(note) {
 	});
 	markdown = markdown.replaceAll("<input type=\"checkbox\" checked=\"true\" />", "- [x] ");
 	markdown = markdown.replaceAll("<input type=\"checkbox\" />", "- [ ] ");
+	markdown = convertHtmlLists(markdown);
+	markdown = decodeHtmlEntities(markdown);
 	markdown = markdown.replaceAll("\n", "\n\n");
 	markdown = markdown.replace(/- (.*?)\n\n- /g, "- $1\n- ");
 	markdown = markdown.replace(/\n{3,}/g, "\n\n");

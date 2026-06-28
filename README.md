@@ -44,7 +44,7 @@ docker run -it --rm --env-file $(pwd)/env -v $(pwd)/public/data:/app/public/data
   ```
 
 > [!NOTE]
-> 暂不支持备份私密笔记、待办和思维导图
+> 暂不支持备份私密笔记、待办
 
 ### 3. 生成博客
 
